@@ -3,7 +3,7 @@
     <v-container fluid style="width: 100%" class="mb-4">
       <div class="d-flex justify-space-between" style="align-items: center">
         <div class="d-flex flex-column">
-          <div class="title">Магазин скриптов</div>
+          <div class="title">Юзеры</div>
           <v-breadcrumbs :items="items" small class="mx-0 my-0 px-0 pt-2 pb-0"></v-breadcrumbs>
         </div>
         <div>
@@ -36,7 +36,7 @@
             Страница не найдена
           </v-card-title>
           <v-card-text>
-            Такой страницы пока нет, но в будущем возможно она появится.
+            Такой страницы пока нет, но в будущем, возможно, она появится.
           </v-card-text>
         </v-card>
         <div v-if="mods.pages >1 && mods.mods.length" class="text-center">
@@ -106,8 +106,6 @@
 				},
 				{
 					text: 'Магазин скриптов',
-					disabled: true,
-					to: '/store'
 				}
 			]
 		}),

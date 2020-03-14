@@ -121,8 +121,14 @@
           </template>
 
           <v-list>
+            <v-list-item to="/donate">
+              <v-list-item-title>Пополнить</v-list-item-title>
+            </v-list-item>
             <v-list-item to="/profile">
               <v-list-item-title>Профиль</v-list-item-title>
+            </v-list-item>
+            <v-list-item to="/settings">
+              <v-list-item-title>Настройки</v-list-item-title>
             </v-list-item>
             <v-list-item @click="logout">
               <v-list-item-title>Выход</v-list-item-title>
@@ -225,7 +231,7 @@
 					{
 						icon: 'mdi-plus',
 						title: 'Пополнить счет',
-						to: '/replenish'
+						to: '/donate'
 					},
 					{
 						icon: 'mdi-history',

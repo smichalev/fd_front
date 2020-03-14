@@ -22,7 +22,7 @@
                       0 ₽
                     </div>
                   </div>
-                  <v-btn color="success" small dark elevation="0">Пополнить</v-btn>
+                  <v-btn color="success" small dark elevation="0" to="/donate">Пополнить</v-btn>
                 </div>
               </div>
             </v-card>
@@ -46,7 +46,7 @@
                       0 ₽
                     </div>
                   </div>
-                  <v-btn color="primary" small dark elevation="0">Детализация</v-btn>
+                  <v-btn color="primary" small dark elevation="0" to="stats">Детализация</v-btn>
                 </div>
               </div>
             </v-card>

@@ -23,14 +23,14 @@
               required
               dense
             ></v-text-field>
-            <v-select
+            <v-text-field
               v-model="version"
-              :items="versionList"
+              :rules="versionRules"
               label="Версия модификации"
               outlined
-              :rules="versionRules"
+              required
               dense
-            ></v-select>
+            ></v-text-field>
 
             <v-textarea
               v-model="description"
@@ -48,7 +48,7 @@
               label="Цена"
             ></v-text-field>
             <v-slider
-              v-model="sale"
+              v-model="discount"
               thumb-label="always"
               label="Скидка"
             >
@@ -74,6 +74,7 @@
 </template>
 
 <script>
+	let requiredMsg = 'Это поле обязательно к заполнению';
 	export default {
 		data: () => ({
 			loading: false,
@@ -81,13 +82,8 @@
 			title: '',
 			description: '',
 			version: '',
-			versionList: [
-				'alfa',
-				'beta',
-				'final'
-			],
 			price: '',
-			sale: null,
+			discount: null,
 			breadcrumbs: [
 				{
 					text: 'Главная страница',
@@ -107,16 +103,16 @@
 			],
 			valid: true,
 			titleRules: [
-				v => !!v || 'Это поле обязательно к заполнению'
-			],
-			descriptionRules: [
-				v => !!v || 'Это поле обязательно к заполнению'
+				v => !!v || requiredMsg
 			],
 			versionRules: [
-				v => !!v || 'Это поле обязательно к заполнению'
+				v => !!v || requiredMsg
+			],
+			descriptionRules: [
+				v => !!v || requiredMsg
 			],
 			priceRules: [
-				v => !!v || 'Это поле обязательно к заполнению'
+				v => !!v || requiredMsg
 			]
 		}),
 		methods: {
@@ -133,7 +129,7 @@
 					description: this.description,
 					version: this.version,
 					price: this.price,
-					sale: this.sale
+					discount: this.discount
 				}, {
 					headers: {Authorization: `Bearer ${ localStorage.getItem('token') }`}
 				}).then((data) => {
