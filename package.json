@@ -2,7 +2,7 @@
   "name": "FastDonate.ru",
   "version": "0.0.4",
   "description": "Система автоматического приёма донат-услуг для игровых серверов, онлайн площадка для продажи скриптов",
-  "author": "Neon, smickalev",
+  "author": "Neon, smichalev",
   "private": true,
   "scripts": {
     "dev": "nuxt --port 4000",
