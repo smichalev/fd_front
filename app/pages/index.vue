@@ -1,92 +1,88 @@
 <template>
-  <v-layout
-    column
-    justify-center
-    align-center
-  >
-    <v-flex
-      xs12
-      sm8
-      md6
-    >
-      <div class="text-center">
-        <logo />
-        <vuetify-logo />
-      </div>
-      <v-card>
-        <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
-        </v-card-title>
-        <v-card-text>
-          <p>Vuetify is a progressive Material Design component framework for Vue.js. It was designed to empower developers to create amazing applications.</p>
-          <p>
-            For more information on Vuetify, check out the <a
-              href="https://vuetifyjs.com"
-              target="_blank"
+  <div>
+    <v-container fluid style="width: 100%" class="mb-4">
+      <div class="panel panel-primary">
+        <div class="list-group row">
+          <div class="list-group-item col-sm-4 col-xs-12">
+            <v-card
+              color="#00a65a"
+              dark
+              elevation="0"
+              dense
+              class="px-1"
             >
-              documentation
-            </a>.
-          </p>
-          <p>
-            If you have questions, please join the official <a
-              href="https://chat.vuetifyjs.com/"
-              target="_blank"
-              title="chat"
-            >
-              discord
-            </a>.
-          </p>
-          <p>
-            Find a bug? Report it on the github <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              title="contribute"
-            >
-              issue board
-            </a>.
-          </p>
-          <p>Thank you for developing with Vuetify and I look forward to bringing more exciting features in the future.</p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
+              <div class="d-flex flex-no-wrap">
+                <v-icon size="70">mdi-cash</v-icon>
+                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;" class="mr-2">
+                  <div style="display: flex; flex-direction: column">
+                    <div>
+                      Личный счет
+                    </div>
+                    <div class="font-weight-bold">
+                      0 ₽
+                    </div>
+                  </div>
+                  <v-btn color="success" small dark elevation="0">Пополнить</v-btn>
+                </div>
+              </div>
+            </v-card>
           </div>
-          <hr class="my-3">
-          <a
-            href="https://nuxtjs.org/"
-            target="_blank"
-          >
-            Nuxt Documentation
-          </a>
-          <br>
-          <a
-            href="https://github.com/nuxt/nuxt.js"
-            target="_blank"
-          >
-            Nuxt GitHub
-          </a>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            color="primary"
-            nuxt
-            to="/inspire"
-          >
-            Continue
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-flex>
-  </v-layout>
+          <div class="list-group-item col-sm-4 col-xs-12">
+            <v-card
+              color="#0c42ae"
+              dark
+              elevation="0"
+              dense
+              class="px-1"
+            >
+              <div class="d-flex flex-no-wrap">
+                <v-icon size="70">mdi-cash</v-icon>
+                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;" class="mr-2">
+                  <div style="display: flex; flex-direction: column">
+                    <div>
+                      Партнерский счет
+                    </div>
+                    <div class="font-weight-bold">
+                      0 ₽
+                    </div>
+                  </div>
+                  <v-btn color="primary" small dark elevation="0">Детализация</v-btn>
+                </div>
+              </div>
+            </v-card>
+          </div>
+          <div class="list-group-item col-sm-4 col-xs-12">
+            <v-card
+              color="#ffa636"
+              dark
+              elevation="0"
+              dense
+              class="px-1"
+            >
+              <div class="d-flex flex-no-wrap">
+                <v-icon size="70">mdi-cash</v-icon>
+                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;" class="mr-2">
+                  <div style="display: flex; flex-direction: column">
+                    <div>
+                     Реферальная система
+                    </div>
+                    <div class="font-weight-bold">
+                      0
+                    </div>
+                  </div>
+                  <v-btn color="warning" small dark elevation="0">FAQ</v-btn>
+                </div>
+              </div>
+            </v-card>
+          </div>
+        </div>
+      </div>
+    </v-container>
+  </div>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
-import VuetifyLogo from '~/components/VuetifyLogo.vue'
-
-export default {
-  components: {
-    Logo,
-    VuetifyLogo
-  }
-}
+	export default {
+		data: () => ({})
+	};
 </script>

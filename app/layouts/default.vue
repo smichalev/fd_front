@@ -2,35 +2,55 @@
   <v-app style="background: #f1f1f1">
     <v-navigation-drawer
       v-model="drawer"
-      clipped="true"
+      :clipped="clipped"
       fixed
       app
     >
-      <v-list-item>
-        <v-list-item-content>
-          <div class="d-flex" style="align-items: center">
-            <div class="mr-2">
-              <v-avatar color="indigo" size="48">
-                <span class="white--text headline">36</span>
-              </v-avatar>
-            </div>
-            <div>
-              <v-list-item-title class="title">
-                Application
-              </v-list-item-title>
-            </div>
-          </div>
-          <v-btn block color="error" elevation="0" text>Выйти</v-btn>
-        </v-list-item-content>
-      </v-list-item>
-      <v-divider></v-divider>
+      <div style="text-transform: uppercase" class="mt-2 mx-2">Меню сайта</div>
       <v-list>
         <v-list-item
-          v-for="(item, i) in items"
+          v-for="(item, i) in menuOne"
           :key="i"
           :to="item.to"
-          router
           exact
+
+          dense
+        >
+          <v-list-item-action>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title v-text="item.title"/>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+      <div style="text-transform: uppercase" class="mt-2 mx-2">Для пользователя</div>
+      <v-list>
+        <v-list-item
+          v-for="(item, i) in menuTwo"
+          :key="i"
+          :to="item.to"
+          exact
+
+          dense
+        >
+          <v-list-item-action>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title v-text="item.title"/>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+      <div style="text-transform: uppercase" class="mt-2 mx-2">Для продавца</div>
+      <v-list>
+        <v-list-item
+          v-for="(item, i) in menuThree"
+          :key="i"
+          :to="item.to"
+          exact
+
+          dense
         >
           <v-list-item-action>
             <v-icon>{{ item.icon }}</v-icon>
@@ -42,9 +62,10 @@
       </v-list>
     </v-navigation-drawer>
     <v-app-bar
-      clipped-left="true"
+      :clipped-left="clippedleft"
       fixed
       app
+      dense
       color="#0c42ae"
       elevation="0"
     >
@@ -52,6 +73,7 @@
         icon
         @click.stop="rightDrawer = !rightDrawer"
         color="#fff"
+        class="d-lg-none d-xl-none"
       >
         <v-icon>mdi-menu</v-icon>
       </v-btn>
@@ -77,14 +99,40 @@
         <div class="name">FastDonate</div>
       </nuxt-link>
       <v-spacer/>
-      <div>
-        123
-      </div>
+      <v-btn v-if="loadingProfile && !login" color="#171a21" dark elevation="0" @click="authorization">
+        <v-icon left>mdi-steam</v-icon>
+        Steam login
+      </v-btn>
+      <v-toolbar-items v-if="loadingProfile">
+        <v-menu offset-y bottom right transition="slide-y-transition" v-if="login">
+          <template v-slot:activator="{ on }">
+            <v-btn v-on="on" color="#0c42ae" dark elevation="0">
+              <v-avatar size="40" class="mr-2 justify-center">
+                <img
+                  :src="profile.avatar"
+                >
+              </v-avatar>
+              <div style="flex-direction: column" class="d-none d-sm-flex">
+                <div>{{ profile.login }}</div>
+                <div style="font-size: 12px">{{ profile.balance }} ₽</div>
+              </div>
+              <v-icon small>mdi-chevron-down</v-icon>
+            </v-btn>
+          </template>
+
+          <v-list>
+            <v-list-item to="/profile">
+              <v-list-item-title>Профиль</v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="logout">
+              <v-list-item-title>Выход</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </v-toolbar-items>
     </v-app-bar>
     <v-content fluid style="width: 100%">
-      <v-container fluid style="width: 100%">
-        <nuxt/>
-      </v-container>
+      <nuxt/>
     </v-content>
     <v-navigation-drawer
       v-model="rightDrawer"
@@ -92,13 +140,51 @@
       temporary
       fixed
     >
+      <div style="text-transform: uppercase" class="mt-2 mx-2">Меню сайта</div>
       <v-list>
         <v-list-item
-          v-for="(item, i) in items"
+          v-for="(item, i) in menuOne"
           :key="i"
           :to="item.to"
-          router
           exact
+
+          dense
+        >
+          <v-list-item-action>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title v-text="item.title"/>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+      <div style="text-transform: uppercase" class="mt-2 mx-2">Для пользователя</div>
+      <v-list>
+        <v-list-item
+          v-for="(item, i) in menuTwo"
+          :key="i"
+          :to="item.to"
+          exact
+
+          dense
+        >
+          <v-list-item-action>
+            <v-icon>{{ item.icon }}</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title v-text="item.title"/>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+      <div style="text-transform: uppercase" class="mt-2 mx-2">Для продавца</div>
+      <v-list>
+        <v-list-item
+          v-for="(item, i) in menuThree"
+          :key="i"
+          :to="item.to"
+          exact
+
+          dense
         >
           <v-list-item-action>
             <v-icon>{{ item.icon }}</v-icon>
@@ -113,36 +199,119 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        drawer: true,
-        fixed: true,
-        items: [
-          {
-            icon: 'mdi-apps',
-            title: 'Welcome',
-            to: '/'
-          },
-          {
-            icon: 'mdi-chart-bubble',
-            title: 'Inspire',
-            to: '/inspire'
-          }
-        ],
-        right: false,
-        rightDrawer: false,
-        title: 'Vuetify.js'
-      };
-    },
-    mounted() {
-      this.$axios.get('http://dev.fastdonate.local/api/profile', {
-        headers: {Authorization: `Bearer ${ localStorage.getItem('token') }`}
-      }).then((data) => {
-        console.log(data);
-      });
-    }
-  };
+	export default {
+		data() {
+			return {
+				loadingProfile: true,
+				login: false,
+				profile: {},
+				drawer: true,
+				fixed: true,
+				clipped: true,
+				clippedleft: true,
+				menuOne: [
+					{
+						icon: 'mdi-server',
+						title: 'Каталог серверов',
+						to: '/servers'
+					},
+					{
+						icon: 'mdi-store',
+						title: 'Магазин скриптов',
+						to: '/store'
+					}
+				],
+				menuTwo: [
+					{
+						icon: 'mdi-plus',
+						title: 'Пополнить счет',
+						to: '/replenish'
+					},
+					{
+						icon: 'mdi-history',
+						title: 'История аккаунта',
+						to: '/history'
+					},
+					{
+						icon: 'mdi-account',
+						title: 'Моя страница',
+						to: '/profile'
+					},
+					{
+						icon: 'mdi-account-settings',
+						title: 'Настройки',
+						to: '/settings'
+					},
+					{
+						icon: 'mdi-help',
+						title: 'Помощь',
+						to: '/help'
+					}
+				],
+				menuThree: [
+					{
+						icon: 'mdi-chart-areaspline',
+						title: 'Статистика продаж',
+						to: '/stats'
+					},
+					{
+						icon: 'mdi-server-network',
+						title: 'Мои сервера',
+						to: '/myservers'
+					},
+					{
+						icon: 'mdi-cash-usd',
+						title: 'Мой донат',
+						to: '/mydonate'
+					},
+					{
+						icon: 'mdi-file',
+						title: 'Мои скрипты',
+						to: '/myscripts'
+					},
+					{
+						icon: 'mdi-content-save',
+						title: 'Для сервера',
+						to: '/forserver'
+					}
+				],
+				right: false,
+				rightDrawer: false
+			};
+		},
+		methods: {
+			authorization() {
+				window.location.href = 'http://dev.fastdonate.local/api/auth/steam';
+			},
+			logout() {
+				localStorage.removeItem('token');
+				this.$store.commit('logout');
+				this.profile = {};
+				this.login = false;
+			}
+		},
+		mounted() {
+			this.$axios.get('http://dev.fastdonate.local/api/profile', {
+				headers: {Authorization: `Bearer ${ localStorage.getItem('token') }`}
+			}).then((data) => {
+				this.loadingProfile = true;
+				if (data) {
+					this.$store.commit('login', data.data.profile);
+					if (data.data.profile !== {}) {
+						this.profile = data.data.profile;
+						this.login = true;
+					}
+				}
+				else {
+					localStorage.removeItem('token');
+					this.$store.commit('logout');
+				}
+			}).catch(() => {
+				localStorage.removeItem('token');
+				this.$store.commit('logout');
+			});
+		}
+	};
 </script>
 
 <style lang="scss" scoped>
@@ -159,8 +328,8 @@
     align-items: center;
 
     .icon {
-      height: 50px;
-      width: 50px;
+      height: 43px;
+      width: 43px;
     }
 
     .name {
