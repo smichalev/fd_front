@@ -13,15 +13,15 @@
           </v-btn>
         </div>
       </div>
-      <div class="panel panel-primary" v-if="mods.status === 'success'  && mods.mods.length">
+      <div class="panel panel-primary" v-if="servers.status === 'success' && servers.servers.length">
         <div class="list-group row">
-          <div class="list-group-item col-sm-6 col-xs-12" v-for="mod in mods.mods">
+          <div class="list-group-item col-sm-6 col-xs-12" v-for="mod in servers.servers">
             <serverCardBlock :data="mod"></serverCardBlock>
           </div>
         </div>
       </div>
-      <div v-if="mods.status === 'success'">
-        <v-card v-if="mods.pages === 0 && !mods.mods.length" class="mx-auto"
+      <div v-if="servers.status === 'success'">
+        <v-card v-if="servers.pages === 0 && !servers.servers.length" class="mx-auto"
                 outlined>
           <v-card-title>
             Пока еще нет записей
@@ -31,7 +31,7 @@
           </v-card-text>
         </v-card>
 
-        <v-card v-if="mods.page > mods.pages && !mods.mods.length">
+        <v-card v-if="servers.page > servers.pages && !servers.servers.length">
           <v-card-title>
             Страница не найдена
           </v-card-title>
@@ -39,22 +39,16 @@
             Такой страницы пока нет, но в будущем, возможно, она появится.
           </v-card-text>
         </v-card>
-        <div v-if="mods.pages >1 && mods.mods.length" class="text-center">
+        <div v-if="servers.pages >1 && servers.servers.length" class="text-center">
           <div v-if="!$router.history.current.query.page">
-            <v-pagination @input="onPageChange"
-                          v-model="page"
-                          :length="mods.pages"
-            ></v-pagination>
+            <v-pagination @input="onPageChange" v-model="page" :length="servers.pages"></v-pagination>
           </div>
           <div v-else>
-            <v-pagination @input="onPageChange"
-                          v-model="mods.page"
-                          :length="mods.pages"
-            ></v-pagination>
+            <v-pagination @input="onPageChange" v-model="servers.page" :length="servers.pages"></v-pagination>
           </div>
         </div>
       </div>
-      <v-card v-if="mods.status === 'error'">
+      <v-card v-if="servers.status === 'error'">
         <v-card-title>
           Ошибка
         </v-card-title>
@@ -71,32 +65,33 @@
 
 	export default {
 		async asyncData({$axios, route}) {
-			let mods, page;
+			let servers, page;
 			try {
 				page = route.query.page ? route.query.page : 0;
 				let url = 'http://dev.fastdonate.local/api/servers';
 				if (page) {
 					url += '?page=' + page;
 				}
-				mods = await $axios.$get(url);
+				servers = await $axios.$get(url);
 			}
 			catch (e) {
-				mods = {status: 'error'};
+				servers = {status: 'error', e};
+        console.log(servers);
 			}
 
 			if (page === 0) {
 				page = 1;
 			}
-			return {status: 'success', mods, page};
+			return {status: 'success', servers, page};
 		},
 		components: {
 			serverCardBlock
 		},
 		data: () => ({
 			page: 1,
-			mods: {
+			servers: {
 				status: 'wait',
-				mods: []
+				servers: []
 			},
 			items: [
 				{
@@ -112,7 +107,7 @@
 		methods: {
 			onPageChange(page) {
 				this.$axios.get('http://dev.fastdonate.local/api/servers?page=' + page).then((data) => {
-					this.mods = data.data;
+					this.servers = data.data;
 					window.history.pushState('', '', 'servers?page=' + page);
 				});
 			}

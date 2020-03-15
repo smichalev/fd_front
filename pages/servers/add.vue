@@ -7,62 +7,14 @@
         </div>
       </div>
       <v-breadcrumbs :items="breadcrumbs" small class="mx-0 my-0 px-0 py-2"></v-breadcrumbs>
-      <v-card class="mx-auto"
-              outlined>
+      <v-card class="mx-auto" outlined>
         <v-card-text>
-          <v-form
-            ref="form"
-            v-model="valid"
-            lazy-validation
-          >
-            <v-text-field
-              v-model="title"
-              :rules="titleRules"
-              label="Название сервера"
-              outlined
-              required
-              dense
-            ></v-text-field>
-            <v-text-field
-              v-model="version"
-              :rules="versionRules"
-              label="Версия модификации"
-              outlined
-              required
-              dense
-            ></v-text-field>
-
-            <v-textarea
-              v-model="description"
-              :rules="descriptionRules"
-              outlined
-              label="Описание модификации"
-            ></v-textarea>
-            <v-text-field
-              outlined
-              v-model="price"
-              :rules="priceRules"
-              prefix="₽"
-              @keypress="onlyNumber"
-              dense
-              label="Цена"
-            ></v-text-field>
-            <v-slider
-              v-model="discount"
-              thumb-label="always"
-              label="Скидка"
-            >
-              <template v-slot:thumb-label="{ value }" color="warning">
-                {{ value }}%
-              </template>
-            </v-slider>
-            <v-btn
-              color="rgb(12, 66, 174)"
-              dark
-              block
-              elevation="0"
-              @click="send"
-            >
+          <v-form ref="form" v-model="valid" lazy-validation>
+            <v-text-field v-model="host" :rules="hostRules" label="IP адрес сервера" outlined required dense></v-text-field>
+            <v-text-field outlined v-model="port" :rules="portRules" @keypress="onlyNumber" dense label="Порт сервера"></v-text-field>
+            <v-text-field v-model="game" :rules="gameRules" label="Игра" outlined required dense></v-text-field>
+            <v-text-field v-model="mod" :rules="modRules" label="Игровой режим на сервере" outlined required dense></v-text-field>
+            <v-btn color="rgb(12, 66, 174)" dark block elevation="0" @click="send">
               <v-icon>mdi-plus</v-icon>
               Добавить
             </v-btn>
@@ -79,11 +31,10 @@
 		data: () => ({
 			loading: false,
 			data: null,
-			title: '',
-			description: '',
-			version: '',
-			price: '',
-			discount: null,
+			host: '',
+			game: '',
+			mod: '',
+			port: '',
 			breadcrumbs: [
 				{
 					text: 'Главная страница',
@@ -100,16 +51,16 @@
 				}
 			],
 			valid: true,
-			titleRules: [
+			hostRules: [
 				v => !!v || requiredMsg
 			],
-			versionRules: [
+			gameRules: [
 				v => !!v || requiredMsg
 			],
-			descriptionRules: [
+			modRules: [
 				v => !!v || requiredMsg
 			],
-			priceRules: [
+			portRules: [
 				v => !!v || requiredMsg
 			]
 		}),
@@ -122,22 +73,21 @@
 			},
 			send() {
 				this.loading = true;
-				this.$axios.post('http://dev.fastdonate.local/api/mod', {
-					title: this.title,
-					description: this.description,
-					version: this.version,
-					price: this.price,
-					discount: this.discount
+				this.$axios.post('http://dev.fastdonate.local/api/servers', {
+					game: this.game,
+					host: this.host,
+					mod: this.mod,
+					port: this.port,
 				}, {
 					headers: {Authorization: `Bearer ${ localStorage.getItem('token') }`}
 				}).then((data) => {
 					this.$notify({
 						title: 'Успешно',
-						message: 'Модификация успешно добавлена',
+						message: 'Сервер успешно добавлен!',
 						type: 'success',
 						position: 'bottom-right'
 					});
-					this.$router.push('/store/' + data.data.mod.id);
+					this.$router.push('/servers/' + data.data.server.id);
 				}).catch((err) => {
 						this.$notify({
 							title: 'Ошибка',
@@ -149,8 +99,6 @@
 					.finally(() => this.loading = false);
 			}
 		},
-		mounted() {
-
-		}
+		mounted() {}
 	};
 </script>

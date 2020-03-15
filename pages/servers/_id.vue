@@ -1,31 +1,25 @@
 <template>
   <div>
     <v-container fluid style="width: 100%" class="mb-4">
-      <div v-if="mod.status === 'success'">
+      <div v-if="server.status === 'success'">
         <div class="d-flex justify-space-between" style="align-items: center">
           <div class="d-flex" style="align-items: center">
-            <div class="title">Скрипт {{ mod.mod.title }}</div>
+            <div class="title">Сервер {{ server.server.host }}:{{ server.server.port }}</div>
           </div>
         </div>
         <v-breadcrumbs :items="breadcrumbs" small class="mx-0 my-0 px-0 py-2"></v-breadcrumbs>
-        <v-card class="mx-auto"
-                outlined>
+        <v-card class="mx-auto" outlined>
 			<v-card-text>
-	            <div v-if="mod.mod.active">
-	            	<v-card-title>{{ mod.mod.title }}</v-card-title>
-					<v-card-text>Version {{ mod.mod.version }}</v-card-text>
-					<v-card-text>Price: {{ mod.mod.price/100*(100-mod.mod.discount) }} ({{ mod.mod.price }} -{{ mod.mod.discount }}%)</v-card-text>
-					<v-card-text>Desc: {{ mod.mod.description }}</v-card-text>
-					<v-card-text>Updated: {{ new Date(mod.mod.updatedAt).toString() }}</v-card-text>
-
-
-					<v-card-text>Author: {{ mod.mod.Creator.login }}</v-card-text>
+	            <div v-if="server.server.active">
+					<v-card-text>GAME: {{ server.server.game }}</v-card-text>
+					<v-card-text>MODE: {{ server.server.mod }}</v-card-text>
+					<v-card-text>Updated: {{ new Date(server.server.updatedAt).toString() }}</v-card-text>
+					<v-card-text>Author: {{ server.server.Creator.login }}</v-card-text>
 		        </div>
-
-	            <div v-if="!mod.mod.active">
-					Мод неактивен
+	            <div v-if="!server.server.active">
+					Сервер неактивен
 	            </div>
-				{{ mod }}
+				{{ server }}
 			</v-card-text>
         </v-card>
       </div>
@@ -36,34 +30,32 @@
 <script>
 	export default {
 		async asyncData({$axios, route, params}) {
-			let mod, breadcrumbs;
+			let server, breadcrumbs;
 			try {
-				mod = await $axios.$get(`http://dev.fastdonate.local/api/mod/${ params.id }`);
+				server = await $axios.$get(`http://dev.fastdonate.local/api/servers/${ params.id }`);
 			}
 			catch (e) {
-				mod = {status: 'error'};
+				server = {status: 'error'};
 			}
 			breadcrumbs = [
 				{
 					text: 'Главная страница',
-					disabled: false,
 					to: '/'
 				},
 				{
-					text: 'Магазин скриптов',
-					disabled: false,
+					text: 'Список серверов',
 					to: './#'
 				},
 				{
-					text: mod.mod.title,
+					text: server.server.host,
 				}
 			];
-			return {status: 'success', mod, breadcrumbs};
+			return {status: 'success', server, breadcrumbs};
 		},
 		data: () => ({
-			mod: {
+			server: {
 				status: 'wait',
-				mod: [],
+				server: [],
 				breadcrumbs: []
 			}
 		})

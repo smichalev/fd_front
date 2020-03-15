@@ -97,8 +97,6 @@
 				},
 				{
 					text: 'Добавить новый скрипт',
-					disabled: true,
-					to: '/store/add'
 				}
 			],
 			valid: true,

@@ -56,8 +56,8 @@
             <div style="text-decoration: line-through;">{{
               data.price }} ₽
             </div>
-            <div style="text-decoration: none; color: #4caf50" class="ml-1 font-weight-bold">{{ (data.price / 100) *
-              (100 - data.discount) }} ₽
+            <div style="text-decoration: none; color: #4caf50" class="ml-1 font-weight-bold">{{ ((data.price / 100) *
+              (100 - data.discount)).toFixed(2) }} ₽
             </div>
           </div>
           <div v-if="!data.discount" class="font-weight-bold mr-2" style="color: #4caf50; font-size: 17px">{{ data.price }}
