@@ -33,21 +33,14 @@
           </v-card-text>
         </div>
         <div>
-          <v-avatar
-            class="ma-3"
-            size="125"
-            tile
-          >
+          <v-avatar class="ma-3" size="125" tile>
             <v-img src="https://flixcon.ru/media/no-poster.jpg" style="border-radius: 5px"></v-img>
-
           </v-avatar>
         </div>
       </div>
       <v-card-actions>
-        <div class="d-flex" style="align-items: center">
-          <v-avatar size="25" class="mr-1"><img
-            :src="data.Creator.avatar"
-          ></v-avatar>
+        <div class="d-flex" style="align-items: center; cursor: pointer;" @click="$router.push('/users/'+ data.Creator.id)">
+          <v-avatar size="25" class="mr-1"><img :src="data.Creator.avatar"></v-avatar>
           <div class="font-weight-medium">{{ data.Creator.login }}</div>
         </div>
         <v-spacer></v-spacer>

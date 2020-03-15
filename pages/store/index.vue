@@ -13,7 +13,7 @@
           </v-btn>
         </div>
       </div>
-      <div class="panel panel-primary" v-if="mods.status === 'success'  && mods.mods.length">
+      <div class="panel panel-primary" v-if="mods.status === 'success' && mods.mods.length">
         <div class="list-group row">
           <div class="list-group-item col-sm-6 col-xs-12" v-for="mod in mods.mods">
             <modificationBlock :data="mod"></modificationBlock>
@@ -21,8 +21,7 @@
         </div>
       </div>
       <div v-if="mods.status === 'success'">
-        <v-card v-if="mods.pages === 0 && !mods.mods.length" class="mx-auto"
-                outlined>
+        <v-card v-if="mods.pages === 0 && !mods.mods.length" class="mx-auto" outlined>
           <v-card-title>
             Пока еще нет записей
           </v-card-title>
@@ -41,16 +40,10 @@
         </v-card>
         <div v-if="mods.pages >1 && mods.mods.length" class="text-center">
           <div v-if="!$router.history.current.query.page">
-            <v-pagination @input="onPageChange"
-                          v-model="page"
-                          :length="mods.pages"
-            ></v-pagination>
+            <v-pagination @input="onPageChange" v-model="page" :length="mods.pages"></v-pagination>
           </div>
           <div v-else>
-            <v-pagination @input="onPageChange"
-                          v-model="mods.page"
-                          :length="mods.pages"
-            ></v-pagination>
+            <v-pagination @input="onPageChange" v-model="mods.page" :length="mods.pages"></v-pagination>
           </div>
         </div>
       </div>

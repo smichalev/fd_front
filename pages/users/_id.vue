@@ -1,31 +1,28 @@
 <template>
   <div>
     <v-container fluid style="width: 100%" class="mb-4">
-      <div v-if="mod.status === 'success'">
+      <div v-if="user.status === 'success'">
         <div class="d-flex justify-space-between" style="align-items: center">
           <div class="d-flex" style="align-items: center">
-            <div class="title">Скрипт {{ mod.mod.title }}</div>
+            <div class="title">Пользователь {{ user.user.login }}</div>
           </div>
         </div>
         <v-breadcrumbs :items="breadcrumbs" small class="mx-0 my-0 px-0 py-2"></v-breadcrumbs>
-        <v-card class="mx-auto"
-                outlined>
+        <v-card class="mx-auto" outlined>
 			<v-card-text>
-	            <div v-if="mod.mod.active">
-	            	<v-card-title>{{ mod.mod.title }}</v-card-title>
-					<v-card-text>Version {{ mod.mod.version }}</v-card-text>
-					<v-card-text>Price: {{ mod.mod.price/100*(100-mod.mod.discount) }} ({{ mod.mod.price }} -{{ mod.mod.discount }}%)</v-card-text>
-					<v-card-text>Desc: {{ mod.mod.description }}</v-card-text>
-					<v-card-text>Updated: {{ new Date(mod.mod.updatedAt).toString() }}</v-card-text>
-
-
-					<v-card-text>Author: {{ mod.mod.Creator.login }}</v-card-text>
+	            <div v-if="user.user.active">
+	            	<v-avatar size="25" class="mr-1"><img :src="user.user.avatar"></v-avatar>
+	            	<v-card-title>STEAM ID 64: {{ user.user.steamid }}</v-card-title>
+					<v-card-text>Registered at: {{ new Date(user.user.updatedAt).toString() }}</v-card-text>
+					<v-card-text>Country: {{ user.user.country }}</v-card-text>
+					<v-card-text>Role: {{ user.user.role }}</v-card-text>
+					<v-card-text>Steam Profile: <a :href="'https://steamcommunity.com/profiles/'+user.user.steamid" target="_blank">https://steamcommunity.com/profiles/{{ user.user.steamid }}</a></v-card-text>
 		        </div>
 
-	            <div v-if="!mod.mod.active">
-					Мод неактивен
+	            <div v-if="!user.user.active">
+					Пользователь неактивен
 	            </div>
-				{{ mod }}
+				{{ user }}
 			</v-card-text>
         </v-card>
       </div>
@@ -36,12 +33,12 @@
 <script>
 	export default {
 		async asyncData({$axios, route, params}) {
-			let mod, breadcrumbs;
+			let user, breadcrumbs;
 			try {
-				mod = await $axios.$get(`http://dev.fastdonate.local/api/mod/${ params.id }`);
+				user = await $axios.$get(`http://dev.fastdonate.local/api/users/${ params.id }`);
 			}
 			catch (e) {
-				mod = {status: 'error'};
+				user = {status: 'error'};
 			}
 			breadcrumbs = [
 				{
@@ -50,20 +47,20 @@
 					to: '/'
 				},
 				{
-					text: 'Магазин скриптов',
-					disabled: false,
+					text: 'Пользователи',
+					disabled: true,
 					to: './#'
 				},
 				{
-					text: mod.mod.title,
+					text: user.user.login,
 				}
 			];
-			return {status: 'success', mod, breadcrumbs};
+			return {status: 'success', user, breadcrumbs};
 		},
 		data: () => ({
-			mod: {
+			user: {
 				status: 'wait',
-				mod: [],
+				user: [],
 				breadcrumbs: []
 			}
 		})

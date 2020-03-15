@@ -27,7 +27,7 @@
         </div>
       </div>
       <v-card-actions>
-        <div class="d-flex" style="align-items: center" @click="$router.push('/users/'+ data.Creator.id)">
+        <div class="d-flex" style="align-items: center; cursor: pointer;" @click="$router.push('/users/'+ data.Creator.id)">
           <v-avatar size="25" class="mr-1"><img :src="data.Creator.avatar"></v-avatar>
           <div class="font-weight-medium">{{ data.Creator.login }}</div>
         </div>

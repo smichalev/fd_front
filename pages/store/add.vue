@@ -7,62 +7,19 @@
         </div>
       </div>
       <v-breadcrumbs :items="breadcrumbs" small class="mx-0 my-0 px-0 py-2"></v-breadcrumbs>
-      <v-card class="mx-auto"
-              outlined>
+      <v-card class="mx-auto" outlined>
         <v-card-text>
-          <v-form
-            ref="form"
-            v-model="valid"
-            lazy-validation
-          >
-            <v-text-field
-              v-model="title"
-              :rules="titleRules"
-              label="Название модификации"
-              outlined
-              required
-              dense
-            ></v-text-field>
-            <v-text-field
-              v-model="version"
-              :rules="versionRules"
-              label="Версия модификации"
-              outlined
-              required
-              dense
-            ></v-text-field>
-
-            <v-textarea
-              v-model="description"
-              :rules="descriptionRules"
-              outlined
-              label="Описание модификации"
-            ></v-textarea>
-            <v-text-field
-              outlined
-              v-model="price"
-              :rules="priceRules"
-              prefix="₽"
-              @keypress="onlyNumber"
-              dense
-              label="Цена"
-            ></v-text-field>
-            <v-slider
-              v-model="discount"
-              thumb-label="always"
-              label="Скидка"
-            >
+          <v-form ref="form" v-model="valid" lazy-validation>
+            <v-text-field v-model="title" 		:rules="titleRules" 		label="Название модификации" outlined required dense></v-text-field>
+            <v-text-field v-model="version" 	:rules="versionRules" 		label="Версия модификации" outlined required dense></v-text-field>
+            <v-textarea v-model="description" 	:rules="descriptionRules" 	label="Описание модификации" outlined></v-textarea>
+            <v-text-field v-model="price" 		:rules="priceRules" 		label="Цена"prefix="₽" @keypress="onlyNumber" outlined dense></v-text-field>
+            <v-slider v-model="discount" thumb-label="always" label="Скидка">
               <template v-slot:thumb-label="{ value }" color="warning">
                 {{ value }}%
               </template>
             </v-slider>
-            <v-btn
-              color="rgb(12, 66, 174)"
-              dark
-              block
-              elevation="0"
-              @click="send"
-            >
+            <v-btn color="rgb(12, 66, 174)" dark  block elevation="0" @click="send">
               <v-icon>mdi-plus</v-icon>
               Добавить
             </v-btn>
@@ -93,7 +50,7 @@
 				{
 					text: 'Магазин скриптов',
 					disabled: false,
-					to: '/store/'
+					to: './#'
 				},
 				{
 					text: 'Добавить новый скрипт',

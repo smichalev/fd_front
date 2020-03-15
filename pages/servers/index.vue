@@ -21,8 +21,7 @@
         </div>
       </div>
       <div v-if="servers.status === 'success'">
-        <v-card v-if="servers.pages === 0 && !servers.servers.length" class="mx-auto"
-                outlined>
+        <v-card v-if="servers.pages === 0 && !servers.servers.length" class="mx-auto" outlined>
           <v-card-title>
             Пока еще нет записей
           </v-card-title>
