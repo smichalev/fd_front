@@ -15,8 +15,8 @@
       </div>
       <div class="panel panel-primary" v-if="servers.status === 'success' && servers.servers.length">
         <div class="list-group row">
-          <div class="list-group-item col-sm-6 col-xs-12" v-for="mod in servers.servers">
-            <serverCardBlock :data="mod"></serverCardBlock>
+          <div class="list-group-item col-sm-12 col-xs-12" v-for="server in servers.servers">
+            <serverCardBlock :data="server"></serverCardBlock>
           </div>
         </div>
       </div>

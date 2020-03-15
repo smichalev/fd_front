@@ -106,8 +106,6 @@
 					.finally(() => this.loading = false);
 			}
 		},
-		mounted() {
-
-		}
+		mounted() {}
 	};
 </script>
