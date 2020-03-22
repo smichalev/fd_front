@@ -4,9 +4,9 @@
       <v-card class="mx-auto"
               outlined>
         <v-card-text>
-          <div class="display-1" v-if="error.statusCode === 404">{{ pageNotFound }}</div>
-          <div class="display-1" v-else>{{ otherError }}</div>
-          <div class="text">Ничего не найдено</div>
+          <div class="display-1" v-if="error.statusCode === 404">Ничего не найдено</div>
+          <div class="display-1" v-if="error.statusCode === 400">Не верный запрос</div>
+          <div class="text">{{ error.message.message }}</div>
           <NuxtLink to="/">
             Вернуться на главную страницу
           </NuxtLink>
@@ -32,8 +32,43 @@
 			};
 		},
 		head() {
-			const title =
-				this.error.statusCode === 404 ? this.pageNotFound : this.otherError;
+			let title = this.otherError;
+			if (this.error.statusCode === 400) {
+				title = 400;
+			}
+			if (this.error.statusCode === 401) {
+				title = 401;
+			}
+			if (this.error.statusCode === 402) {
+				title = 402;
+			}
+			if (this.error.statusCode === 403) {
+				title = 403;
+			}
+			if (this.error.statusCode === 404) {
+				title = 404;
+			}
+			if (this.error.statusCode === 405) {
+				title = 405;
+			}
+			if (this.error.statusCode === 406) {
+				title = 406;
+			}
+			if (this.error.statusCode === 407) {
+				title = 407;
+			}
+			if (this.error.statusCode === 408) {
+				title = 408;
+			}
+			if (this.error.statusCode === 409) {
+				title = 409;
+			}
+			if (this.error.statusCode === 410) {
+				title = 410;
+			}
+			if (this.error.statusCode === 500) {
+				title = 500;
+			}
 			return {
 				title
 			};

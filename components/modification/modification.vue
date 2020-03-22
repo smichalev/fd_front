@@ -40,8 +40,12 @@
       </div>
       <v-card-actions>
         <div class="d-flex" style="align-items: center; cursor: pointer;" @click="$router.push('/users/'+ data.Creator.id)">
-          <v-avatar size="25" class="mr-1"><img :src="data.Creator.avatar"></v-avatar>
-          <div class="font-weight-medium">{{ data.Creator.login }}</div>
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-avatar size="25" class="mr-1" v-on="on"><img :src="data.Creator.avatar"></v-avatar>
+            </template>
+            <span style="font-size: 12px">{{ data.Creator.login }}</span>
+          </v-tooltip>
         </div>
         <v-spacer></v-spacer>
         <div v-if="data.price > 0">
@@ -49,7 +53,7 @@
             <div style="text-decoration: line-through;">{{
               data.price }} ₽
             </div>
-            <div style="text-decoration: none; color: #4caf50" class="ml-1 font-weight-bold">{{ ((data.price / 100) *
+            <div style="text-decoration: none; color: #4caf50" class="ml-1 font-weight-bold" >{{ ((data.price / 100) *
               (100 - data.discount)).toFixed(2) }} ₽
             </div>
           </div>

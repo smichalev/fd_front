@@ -86,7 +86,7 @@
 					price: this.price,
 					discount: this.discount
 				}, {
-					headers: {Authorization: `Bearer ${ localStorage.getItem('token') }`}
+					headers: {Authorization: `${ localStorage.getItem('token') }`}
 				}).then((data) => {
 					this.$notify({
 						title: 'Успешно',
@@ -98,7 +98,7 @@
 				}).catch((err) => {
 						this.$notify({
 							title: 'Ошибка',
-							message: err.response.data.msg,
+							message: err.response.data.message,
 							type: 'error',
 							position: 'bottom-right'
 						});

@@ -13,48 +13,30 @@
           </v-btn>
         </div>
       </div>
-      <div class="panel panel-primary" v-if="mods.status === 'success' && mods.mods.length">
-        <div class="list-group row">
-          <div class="list-group-item col-sm-6 col-xs-12" v-for="mod in mods.mods">
-            <modificationBlock :data="mod"></modificationBlock>
+      <div>
+        <div v-if="!mods.pages && !mods.mods.length" class="mt-3">
+          <v-card outlined>
+            <v-card-title>Ничего нет</v-card-title>
+            <v-card-text>Вы можете добавить запись первым и войти в историю!</v-card-text>
+          </v-card>
+        </div>
+        <div class="panel panel-primary" v-if="mods.mods.length">
+          <div class="list-group row">
+            <div class="list-group-item col-sm-6 col-xs-12" v-for="mod in mods.mods ">
+              <modificationBlock :data="mod"></modificationBlock>
+            </div>
           </div>
         </div>
-      </div>
-      <div v-if="mods.status === 'success'">
-        <v-card v-if="mods.pages === 0 && !mods.mods.length" class="mx-auto" outlined>
-          <v-card-title>
-            Пока еще нет записей
-          </v-card-title>
-          <v-card-text>
-            Вы можете стать первым в истории и выложить запись сюда!
-          </v-card-text>
-        </v-card>
 
-        <v-card v-if="mods.page > mods.pages && !mods.mods.length">
-          <v-card-title>
-            Страница не найдена
-          </v-card-title>
-          <v-card-text>
-            Такой страницы пока нет, но в будущем, возможно, она появится.
-          </v-card-text>
-        </v-card>
         <div v-if="mods.pages >1 && mods.mods.length" class="text-center">
           <div v-if="!$router.history.current.query.page">
-            <v-pagination @input="onPageChange" v-model="page" :length="mods.pages"></v-pagination>
+            <v-pagination @input="onPageChange" v-model="mods.page" :length="mods.pages"></v-pagination>
           </div>
           <div v-else>
             <v-pagination @input="onPageChange" v-model="mods.page" :length="mods.pages"></v-pagination>
           </div>
         </div>
       </div>
-      <v-card v-if="mods.status === 'error'">
-        <v-card-title>
-          Ошибка
-        </v-card-title>
-        <v-card-text>
-          Значением номера страницы может быть только число.
-        </v-card-text>
-      </v-card>
     </v-container>
   </div>
 </template>
@@ -63,7 +45,7 @@
 	import modificationBlock from '~/components/modification/modification';
 
 	export default {
-		async asyncData({$axios, route}) {
+		async asyncData({$axios, route, error}) {
 			let mods, page;
 			try {
 				page = route.query.page ? route.query.page : 0;
@@ -74,23 +56,20 @@
 				mods = await $axios.$get(url);
 			}
 			catch (e) {
-				mods = {status: 'error'};
+				error({statusCode: e.response.status, message: e.response.data});
 			}
 
 			if (page === 0) {
 				page = 1;
 			}
-			return {status: 'success', mods, page};
+			return {mods, page};
 		},
 		components: {
 			modificationBlock
 		},
 		data: () => ({
 			page: 1,
-			mods: {
-				status: 'wait',
-				mods: []
-			},
+			mods: [],
 			items: [
 				{
 					text: 'Главная страница',
@@ -98,7 +77,7 @@
 					to: '/'
 				},
 				{
-					text: 'Магазин скриптов',
+					text: 'Магазин скриптов'
 				}
 			]
 		}),

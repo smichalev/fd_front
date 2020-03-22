@@ -10,7 +10,7 @@
       <v-card class="mx-auto" outlined>
         <v-card-text>
           <v-form ref="form" v-model="valid" lazy-validation>
-            <v-card-title>Укажите систему и сумму пополнения</v-card-title>
+            <v-card-title>Укажите систему и сумму пополнения 2</v-card-title>
             <v-text-field label="Сумма пополнения" :rules="donateRules" prefix="₽" @keypress="onlyNumber" outlined required dense></v-text-field>
             <v-btn color="success" small dark elevation="0" to="/donate">Очко ставлю</v-btn>
           </v-form>

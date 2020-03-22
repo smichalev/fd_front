@@ -79,7 +79,7 @@
 					mod: this.mod,
 					port: this.port,
 				}, {
-					headers: {Authorization: `Bearer ${ localStorage.getItem('token') }`}
+					headers: {Authorization: `${ localStorage.getItem('token') }`}
 				}).then((data) => {
 					this.$notify({
 						title: 'Успешно',
