@@ -73,37 +73,44 @@
           <v-icon left>mdi-steam</v-icon>
           Steam login
         </v-btn>
-        <v-toolbar-items v-if="login">
-          <v-menu offset-y bottom right transition="slide-y-transition" v-if="login">
-            <template v-slot:activator="{ on }">
-              <v-btn v-on="on" color="#0c42ae" dark elevation="0">
-                <v-avatar size="40" class="mr-2 justify-center">
-                  <img :src="profile.avatar">
-                </v-avatar>
-                <div style="flex-direction: column" class="d-none d-sm-flex">
-                  <div>{{ profile.login }}</div>
-                  <div style="font-size: 12px">{{ profile.balance.toFixed(2) }} ₽</div>
-                </div>
-                <v-icon small>mdi-chevron-down</v-icon>
-              </v-btn>
-            </template>
+        <div style="display: flex; align-items: center">
+          <v-toolbar-items v-if="login" style="height: 48px;">
+            <v-btn v-on="on" color="#0c42ae" dark elevation="0">
+              <v-icon>mdi-bell</v-icon>
+            </v-btn>
+          </v-toolbar-items>
+          <v-toolbar-items v-if="login" style="height: 48px;">
+            <v-menu offset-y bottom right transition="slide-y-transition" v-if="login">
+              <template v-slot:activator="{ on }">
+                <v-btn v-on="on" color="#0c42ae" dark elevation="0">
+                  <v-avatar size="40" class="mr-2 justify-center">
+                    <img :src="profile.avatar">
+                  </v-avatar>
+                  <div style="flex-direction: column" class="d-none d-sm-flex">
+                    <div>{{ profile.login }}</div>
+                    <div style="font-size: 12px">{{ profile.balance.toFixed(2) }} ₽</div>
+                  </div>
+                  <v-icon small>mdi-chevron-down</v-icon>
+                </v-btn>
+              </template>
 
-            <v-list>
-              <v-list-item to="/donate">
-                <v-list-item-title>Пополнить</v-list-item-title>
-              </v-list-item>
-              <v-list-item :to="'/users/'+profile.id">
-                <v-list-item-title>Профиль</v-list-item-title>
-              </v-list-item>
-              <v-list-item to="/settings">
-                <v-list-item-title>Настройки</v-list-item-title>
-              </v-list-item>
-              <v-list-item @click="dialog = true">
-                <v-list-item-title>Выход</v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </v-toolbar-items>
+              <v-list>
+                <v-list-item to="/donate">
+                  <v-list-item-title>Пополнить</v-list-item-title>
+                </v-list-item>
+                <v-list-item :to="'/users/'+profile.id">
+                  <v-list-item-title>Профиль</v-list-item-title>
+                </v-list-item>
+                <v-list-item to="/settings">
+                  <v-list-item-title>Настройки</v-list-item-title>
+                </v-list-item>
+                <v-list-item @click="dialog = true">
+                  <v-list-item-title>Выход</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </v-toolbar-items>
+        </div>
       </div>
     </v-app-bar>
     <v-content fluid style="width: 100%">
@@ -146,7 +153,7 @@
     </v-navigation-drawer>
     <v-dialog
       v-model="dialog"
-      max-width="320"
+      max-width="410"
     >
       <v-card>
         <v-card-title class="headline">Вы уверены что хотите выйти?</v-card-title>
@@ -175,119 +182,119 @@
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				loading: true,
-				login: false,
-				profile: {},
-				dialog: false,
-				drawer: true,
-				fixed: true,
-				clipped: true,
-				clippedleft: true,
-				menuOne: [
-					{
-						icon: 'mdi-server',
-						title: 'Каталог серверов',
-						to: '/servers'
-					},
-					{
-						icon: 'mdi-store',
-						title: 'Магазин скриптов',
-						to: '/store'
-					}
-				],
-				menuTwo: [
-					{
-						icon: 'mdi-plus',
-						title: 'Пополнить счет',
-						to: '/donate'
-					},
-					{
-						icon: 'mdi-history',
-						title: 'История аккаунта',
-						to: '/history'
-					},
-					{
-						icon: 'mdi-account-settings',
-						title: 'Настройки',
-						to: '/settings'
-					},
-					{
-						icon: 'mdi-help',
-						title: 'Помощь',
-						to: '/help'
-					}
-				],
-				menuThree: [
-					{
-						icon: 'mdi-chart-areaspline',
-						title: 'Статистика продаж',
-						to: '/stats'
-					},
-					{
-						icon: 'mdi-server-network',
-						title: 'Мои сервера',
-						to: '/myservers'
-					},
-					{
-						icon: 'mdi-file',
-						title: 'Мои скрипты',
-						to: '/myscripts'
-					},
-					{
-						icon: 'mdi-content-save',
-						title: 'Для сервера',
-						to: '/forserver'
-					}
-				],
-				right: false,
-				rightDrawer: false
-			};
-		},
-		methods: {
-			authorization() {
-				window.location.href = 'http://dev.fastdonate.local/api/auth/steam';
-			},
-			logout() {
-				this.loading = true;
-				this.$axios.post('http://dev.fastdonate.local/api/auth/logout').then(() => {
-					this.loading = false;
-					localStorage.removeItem('token');
-					this.$store.commit('logout');
-					this.profile = {};
-					this.login = false;
-					this.dialog = false;
-				});
-			}
-		},
-		mounted() {
-			if (localStorage.getItem('token')) {
-				this.$axios.get('http://dev.fastdonate.local/api/profile', {
-						headers: {Authorization: `${ localStorage.getItem('token') }`}
-					})
-					.then((data) => {
-						this.loading = false;
-						if (data.data.profile !== {}) {
-							this.$store.commit('login', data.data.profile);
-							this.profile = data.data.profile;
-							this.login = true;
-						}
-					})
-					.catch(() => {
-						this.loading = false;
-						this.login = false;
-						this.logout();
-					});
-			}
-			else {
-				this.loading = false;
-				this.login = false;
-				this.logout();
-			}
-		}
-	};
+  export default {
+    data() {
+      return {
+        loading: true,
+        login: false,
+        profile: {},
+        dialog: false,
+        drawer: true,
+        fixed: true,
+        clipped: true,
+        clippedleft: true,
+        menuOne: [
+          {
+            icon: 'mdi-server',
+            title: 'Каталог серверов',
+            to: '/servers'
+          },
+          {
+            icon: 'mdi-store',
+            title: 'Магазин скриптов',
+            to: '/store'
+          }
+        ],
+        menuTwo: [
+          {
+            icon: 'mdi-plus',
+            title: 'Пополнить счет',
+            to: '/donate'
+          },
+          {
+            icon: 'mdi-history',
+            title: 'История аккаунта',
+            to: '/history'
+          },
+          {
+            icon: 'mdi-account-settings',
+            title: 'Настройки',
+            to: '/settings'
+          },
+          {
+            icon: 'mdi-help',
+            title: 'Помощь',
+            to: '/help'
+          }
+        ],
+        menuThree: [
+          {
+            icon: 'mdi-chart-areaspline',
+            title: 'Статистика продаж',
+            to: '/stats'
+          },
+          {
+            icon: 'mdi-server-network',
+            title: 'Мои сервера',
+            to: '/myservers'
+          },
+          {
+            icon: 'mdi-file',
+            title: 'Мои скрипты',
+            to: '/myscripts'
+          },
+          {
+            icon: 'mdi-content-save',
+            title: 'Для сервера',
+            to: '/forserver'
+          }
+        ],
+        right: false,
+        rightDrawer: false
+      };
+    },
+    methods: {
+      authorization() {
+        window.location.href = 'http://dev.fastdonate.local/api/auth/steam';
+      },
+      logout() {
+        this.loading = true;
+        this.$axios.post('http://dev.fastdonate.local/api/auth/logout').then(() => {
+          this.loading = false;
+          localStorage.removeItem('token');
+          this.$store.commit('logout');
+          this.profile = {};
+          this.login = false;
+          this.dialog = false;
+        });
+      }
+    },
+    mounted() {
+      if (localStorage.getItem('token')) {
+        this.$axios.get('http://dev.fastdonate.local/api/profile', {
+            headers: {Authorization: `${ localStorage.getItem('token') }`}
+          })
+          .then((data) => {
+            this.loading = false;
+            if (data.data.profile !== {}) {
+              this.$store.commit('login', data.data.profile);
+              this.profile = data.data.profile;
+              this.login = true;
+            }
+          })
+          .catch(() => {
+            this.loading = false;
+            this.login = false;
+            this.logout();
+          });
+      }
+      else {
+        this.loading = false;
+        this.login = false;
+        this.logout();
+      }
+    }
+  };
 </script>
 
 <style lang="scss" scoped>
@@ -296,7 +303,7 @@
   }
 
   .sitename {
-    padding: 5px 0;
+    cursor: pointer;
     user-select: none;
     display: flex;
     margin-left: 10px;
@@ -317,4 +324,24 @@
     margin-left: 10px;
     margin-right: 10px;
   }
+
+  @media (max-width: 440px) {
+    div.name {
+      margin-left: 4px;
+    }
+    svg.icon {
+      display: none;
+    }
+  }
+
+  @media (max-width: 340px) {
+    div.name {
+      margin-left: 4px;
+    }
+    .name {
+      font-size: 17px;
+    }
+  }
 </style>
+
+

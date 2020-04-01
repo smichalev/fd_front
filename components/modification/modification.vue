@@ -17,35 +17,29 @@
             <el-rate
               v-model="data.rates"
               disabled
-              show-score
               text-color="#ff9900"
-              score-template="{value} points">
+            >
             </el-rate>
           </v-card-subtitle>
-
-          <v-card-text style="line-height: 27px">
-            <v-chip small outlined style="border-radius: 4px">разхештег</v-chip>
-            <v-chip small outlined style="border-radius: 4px">1</v-chip>
-            <v-chip small outlined style="border-radius: 4px">трихештег</v-chip>
-            <v-chip small outlined style="border-radius: 4px">2</v-chip>
-            <v-chip small outlined style="border-radius: 4px">трихештег</v-chip>
-            <v-chip small outlined style="border-radius: 4px">трихештег</v-chip>
+          <v-card-text style="line-height: 27px" v-if="data.Tags.length">
+            <v-chip label v-for="(tag, id) in data.Tags" :key="id" class="my-1 mx-1">#{{ tag.title }}
+            </v-chip>
           </v-card-text>
         </div>
         <div>
-          <v-avatar class="ma-3" size="125" tile>
-            <v-img src="https://flixcon.ru/media/no-poster.jpg" style="border-radius: 5px"></v-img>
+          <v-avatar class="ma-3" size="125" tile v-if="data.cover">
+            <v-img :src="data.cover" style="border-radius: 5px"></v-img>
+          </v-avatar>
+          <v-avatar class="ma-3" size="125" tile v-if="!data.cover">
+            <div style="background: #e4e9ed; border-radius: 5px; width: 125px; height: 125px; display: flex; justify-content: center; align-items: center; text-transform: uppercase; color: #afafaf; font-weight: 600">no poster</div>
           </v-avatar>
         </div>
       </div>
       <v-card-actions>
-        <div class="d-flex" style="align-items: center; cursor: pointer;" @click="$router.push('/users/'+ data.Creator.id)">
-          <v-tooltip top>
-            <template v-slot:activator="{ on }">
-              <v-avatar size="25" class="mr-1" v-on="on"><img :src="data.Creator.avatar"></v-avatar>
-            </template>
-            <span style="font-size: 12px">{{ data.Creator.login }}</span>
-          </v-tooltip>
+        <div class="d-flex" style="align-items: center; cursor: pointer;"
+             @click="$router.push('/users/'+ data.Creator.id)">
+          <v-avatar size="25" class="mr-1"><img :src="data.Creator.avatar"></v-avatar>
+          <div style="font-weight: bold">{{ data.Creator.login }}</div>
         </div>
         <v-spacer></v-spacer>
         <div v-if="data.price > 0">
@@ -53,11 +47,12 @@
             <div style="text-decoration: line-through;">{{
               data.price }} ₽
             </div>
-            <div style="text-decoration: none; color: #4caf50" class="ml-1 font-weight-bold" >{{ ((data.price / 100) *
+            <div style="text-decoration: none; color: #4caf50" class="ml-1 font-weight-bold">{{ ((data.price / 100) *
               (100 - data.discount)).toFixed(2) }} ₽
             </div>
           </div>
-          <div v-if="!data.discount" class="font-weight-bold mr-2" style="color: #4caf50; font-size: 17px">{{ data.price }}
+          <div v-if="!data.discount" class="font-weight-bold mr-2" style="color: #4caf50; font-size: 17px">{{ data.price
+            }}
             ₽
           </div>
         </div>
@@ -88,10 +83,10 @@
 </template>
 
 <script>
-	export default {
-		props: ['data'],
-		data: () => ({
-			show: false
-		})
-	};
+  export default {
+    props: ['data'],
+    data: () => ({
+      show: false
+    })
+  };
 </script>
