@@ -4,7 +4,7 @@
       class="mx-auto"
       outlined
     >
-      <div style="position: absolute; top: -5px; right: -5px; z-index: 3" v-if="data.discount">
+      <div style="position: absolute; top: -5px; right: -5px; z-index: 3" v-if="data.discount && data.discount < 100">
         <v-chip label color="success" small>-{{ data.discount }}%</v-chip>
       </div>
       <div class="d-flex flex-no-wrap justify-space-between" @click="$router.push('/store/'+ data.id)"
@@ -31,9 +31,18 @@
             <v-img :src="data.cover" style="border-radius: 5px"></v-img>
           </v-avatar>
           <v-avatar class="ma-3" size="125" tile v-if="!data.cover">
-            <div style="background: #e4e9ed; border-radius: 5px; width: 125px; height: 125px; display: flex; justify-content: center; align-items: center; text-transform: uppercase; color: #afafaf; font-weight: 600">no poster</div>
+            <div
+              style="background: #e4e9ed; border-radius: 5px; width: 125px; height: 125px; display: flex; justify-content: center; align-items: center; text-transform: uppercase; color: #afafaf; font-weight: 600">
+              no poster
+            </div>
           </v-avatar>
         </div>
+      </div>
+      <div class="mx-2">
+        <v-btn elevation="0" small @click="$router.push('/store/'+ data.id+'/#comments')">
+          <v-icon class="mr-2">mdi-comment-outline</v-icon>
+          {{ data.comments }}
+        </v-btn>
       </div>
       <v-card-actions>
         <div class="d-flex" style="align-items: center; cursor: pointer;"
@@ -42,23 +51,24 @@
           <div style="font-weight: bold">{{ data.Creator.login }}</div>
         </div>
         <v-spacer></v-spacer>
-        <div v-if="data.price > 0">
-          <div class="d-flex mr-2" v-if="data.discount" style="align-items: center; font-size: 17px">
+        <div v-if="((data.price / 100) *
+        (100 - data.discount)).toFixed(2) === '0.00'" class="font-weight-bold mr-2"
+             style="color: #4caf50; font-size: 17px; text-transform: uppercase">БЕСПЛАТНО
+        </div>
+        <div v-else class="mr-2">
+          <div v-if="data.discount" class="d-flex" style="font-size: 17px">
             <div style="text-decoration: line-through;">{{
               data.price }} ₽
             </div>
-            <div style="text-decoration: none; color: #4caf50" class="ml-1 font-weight-bold">{{ ((data.price / 100) *
-              (100 - data.discount)).toFixed(2) }} ₽
+            <div style="text-decoration: none; color: #4caf50" class="ml-1 font-weight-bold">{{
+              ((data.price / 100) *
+              (100 - data.discount)) }} ₽
             </div>
           </div>
-          <div v-if="!data.discount" class="font-weight-bold mr-2" style="color: #4caf50; font-size: 17px">{{ data.price
-            }}
-            ₽
-          </div>
-        </div>
-        <div v-else>
-          <div class="font-weight-bold mr-2" style="color: #4caf50; font-size: 17px; text-transform: uppercase">
-            Бесплатно
+          <div v-if="!data.discount" style="font-size: 17px">
+            <div style="text-decoration: none; color: #4caf50" class="ml-1 font-weight-bold">{{ data.price }}
+              ₽
+            </div>
           </div>
         </div>
         <v-btn

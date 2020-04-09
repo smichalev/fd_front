@@ -118,6 +118,7 @@
   let requiredMsg = 'Это поле обязательно к заполнению';
   let hashtagMsg = 'Такой хештег уже есть';
   export default {
+    middleware: 'login',
     data: () => ({
       dialog: false,
       loading: false,
@@ -253,8 +254,6 @@
           })
           .finally(() => this.loading = false);
       }
-    },
-    mounted() {
     }
   };
 </script>

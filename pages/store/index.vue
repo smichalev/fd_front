@@ -6,7 +6,7 @@
           <div class="title">Магазин скриптов</div>
           <v-breadcrumbs :items="items" small class="mx-0 my-0 px-0 pt-2 pb-0"></v-breadcrumbs>
         </div>
-        <div>
+        <div v-if="isLogin">
           <v-btn elevation="0" color="success" @click="$router.push({path: '/store/add'})">
             <v-icon>mdi-plus</v-icon>
             <span class="desktop">Добавить</span>
@@ -81,6 +81,11 @@
         }
       ]
     }),
+    computed: {
+      isLogin() {
+        return this.$store.state.profile ? true : false;
+      }
+    },
     methods: {
       onPageChange(page) {
         this.$axios.get('http://dev.fastdonate.local/api/mod?page=' + page).then((data) => {
