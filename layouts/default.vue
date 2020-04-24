@@ -23,12 +23,19 @@
         </v-btn>
         <div style="display: flex; align-items: center">
           <v-toolbar-items v-if="login" style="height: 48px;">
-            <v-btn v-on="on" color="#0c42ae" dark elevation="0">
-              <v-icon>mdi-bell</v-icon>
+            <v-btn v-on="on" color="#0c42ae" dark elevation="0" @click="$router.push({path: '/events'})">
+              <v-badge
+                color="error"
+                content="6"
+                overlap
+              >
+                <v-icon>mdi-bell</v-icon>
+              </v-badge>
             </v-btn>
           </v-toolbar-items>
+
           <v-toolbar-items v-if="login" style="height: 48px;">
-            <v-menu offset-y bottom right transition="slide-y-transition" v-if="login">
+            <v-menu offset-y bottom right transition="slide-y-transition">
               <template v-slot:activator="{ on }">
                 <v-btn v-on="on" color="#0c42ae" dark elevation="0">
                   <v-avatar size="40" class="mr-2 justify-center">
@@ -44,16 +51,20 @@
 
               <v-list>
                 <v-list-item to="/donate">
-                  <v-list-item-title>Пополнить</v-list-item-title>
+                  <v-list-item-title v-if="$store.state.lang === 'ru'">Пополнить</v-list-item-title>
+                  <v-list-item-title v-if="$store.state.lang === 'en'">Replenish</v-list-item-title>
                 </v-list-item>
                 <v-list-item :to="'/users/'+profile.id">
-                  <v-list-item-title>Профиль</v-list-item-title>
+                  <v-list-item-title v-if="$store.state.lang === 'ru'">Профиль</v-list-item-title>
+                  <v-list-item-title v-if="$store.state.lang === 'en'">Profile</v-list-item-title>
                 </v-list-item>
                 <v-list-item to="/settings">
-                  <v-list-item-title>Настройки</v-list-item-title>
+                  <v-list-item-title v-if="$store.state.lang === 'ru'">Настройки</v-list-item-title>
+                  <v-list-item-title v-if="$store.state.lang === 'en'">Settings</v-list-item-title>
                 </v-list-item>
                 <v-list-item @click="dialog = true">
-                  <v-list-item-title>Выход</v-list-item-title>
+                  <v-list-item-title v-if="$store.state.lang === 'ru'">Выход</v-list-item-title>
+                  <v-list-item-title v-if="$store.state.lang === 'en'">Logout</v-list-item-title>
                 </v-list-item>
               </v-list>
             </v-menu>
@@ -72,7 +83,8 @@
       max-width="410"
     >
       <v-card>
-        <v-card-title class="headline">Вы уверены что хотите выйти?</v-card-title>
+        <v-card-title class="headline" v-if="$store.state.lang === 'ru'">Вы уверены что хотите выйти?</v-card-title>
+        <v-card-title class="headline" v-if="$store.state.lang === 'en'">Are you sure want logout?</v-card-title>
         <v-card-actions>
           <v-spacer></v-spacer>
 
@@ -81,7 +93,8 @@
             text
             @click="logout"
           >
-            Выйти
+            <span v-if="$store.state.lang === 'ru'">Выйти</span>
+            <span v-if="$store.state.lang === 'en'">Logout</span>
           </v-btn>
 
           <v-btn
@@ -89,7 +102,8 @@
             text
             @click="dialog = false"
           >
-            Отмена
+            <span v-if="$store.state.lang === 'ru'">Отмена</span>
+            <span v-if="$store.state.lang === 'en'">Cancel</span>
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -98,74 +112,75 @@
 </template>
 
 <script>
-  import logo from './../components/logo';
-  import sidebar from './../components/sidebar';
+	import logo from './../components/logo';
+	import sidebar from './../components/sidebar';
 
-  export default {
-    components: {
-      logo, sidebar
-    },
-    data() {
-      return {
-        loading: true,
-        login: false,
-        profile: {},
-        dialog: false,
-        drawer: true,
-        fixed: true,
-        clipped: true,
-        clippedleft: true,
-        right: false,
-        rightDrawer: false
-      };
-    },
-    methods: {
-      authorization() {
-        window.location.href = 'http://dev.fastdonate.local/api/auth/steam';
-      },
-      logout() {
-        this.loading = true;
-        this.$axios.post('http://dev.fastdonate.local/api/auth/logout').then(() => {
-          this.loading = false;
-          localStorage.removeItem('token');
-          this.$store.commit('logout');
-          this.profile = {};
-          this.login = false;
-          this.dialog = false;
-        });
-      }
-    },
-    computed: {
-      isLogin() {
-        return this.$store.state.profile ? true : false;
-      }
-    },
-    mounted() {
-      if (localStorage.getItem('token')) {
-        this.$axios.get('http://dev.fastdonate.local/api/profile', {
-            headers: {Authorization: `${ localStorage.getItem('token') }`}
-          })
-          .then((data) => {
-            this.loading = false;
-            if (data.data.profile !== {}) {
-              this.$store.commit('login', data.data.profile);
-              this.profile = data.data.profile;
-              this.login = true;
-            }
-          })
-          .catch(() => {
-            this.loading = false;
-            this.login = false;
-            this.logout();
-          });
-      }
-      else {
-        this.loading = false;
-        this.login = false;
-        this.logout();
-      }
-    }
-  };
+	export default {
+		components: {
+			logo, sidebar,
+		},
+		data() {
+			return {
+				loading: true,
+				login: false,
+				profile: {},
+				dialog: false,
+				drawer: true,
+				fixed: true,
+				clipped: true,
+				clippedleft: true,
+				right: false,
+				rightDrawer: false,
+			};
+		},
+		methods: {
+			authorization() {
+				window.location.href = 'http://dev.fastdonate.local/api/auth/steam';
+			},
+			logout() {
+				this.loading = true;
+				this.$axios.post('http://dev.fastdonate.local/api/auth/logout').then(() => {
+					this.loading = false;
+					localStorage.removeItem('token');
+					this.$store.commit('logout');
+					this.profile = {};
+					this.login = false;
+					this.dialog = false;
+				});
+			},
+		},
+		watch: {},
+		computed: {
+			isLogin() {
+				return this.$store.state.profile ? true : false;
+			},
+		},
+		mounted() {
+			if (localStorage.getItem('token')) {
+				this.$axios.get('http://dev.fastdonate.local/api/profile', {
+					    headers: {Authorization: `${ localStorage.getItem('token') }`},
+				    })
+				    .then((data) => {
+					    this.loading = false;
+					    if (data.data.profile !== {}) {
+						    this.$store.commit('login', data.data.profile);
+						    this.profile = data.data.profile;
+						    this.login = true;
+					    }
+				    })
+				    .catch(() => {
+					    this.loading = false;
+					    this.login = false;
+					    this.logout();
+				    });
+			}
+			else {
+				this.loading = false;
+				this.login = false;
+				this.logout();
+			}
+		},
+	};
 </script>
 
 <style lang="scss" scoped>

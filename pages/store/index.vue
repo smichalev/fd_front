@@ -42,59 +42,59 @@
 </template>
 
 <script>
-  import modificationBlock from '~/components/modification/modification';
+	import modificationBlock from '~/components/modification/modification';
 
-  export default {
-    async asyncData({$axios, route, error}) {
-      let mods, page;
-      try {
-        page = route.query.page ? route.query.page : 0;
-        let url = 'http://dev.fastdonate.local/api/mod';
-        if (page) {
-          url += '?page=' + page;
-        }
-        mods = await $axios.$get(url);
-      }
-      catch (e) {
-        error({statusCode: e.response.status, message: e.response.data});
-      }
+	export default {
+		async asyncData({$axios, route, error}) {
+			let mods, page;
+			try {
+				page = route.query.page ? route.query.page : 0;
+				let url = 'http://dev.fastdonate.local/api/mod';
+				if (page) {
+					url += '?page=' + page;
+				}
+				mods = await $axios.$get(url);
+			}
+			catch (e) {
+				error({statusCode: e.response.status, message: e.response.data});
+			}
 
-      if (page === 0) {
-        page = 1;
-      }
-      return {mods, page};
-    },
-    components: {
-      modificationBlock
-    },
-    data: () => ({
-      page: 1,
-      mods: [],
-      items: [
-        {
-          text: 'Главная страница',
-          disabled: false,
-          to: '/'
-        },
-        {
-          text: 'Магазин скриптов'
-        }
-      ]
-    }),
-    computed: {
-      isLogin() {
-        return this.$store.state.profile ? true : false;
-      }
-    },
-    methods: {
-      onPageChange(page) {
-        this.$axios.get('http://dev.fastdonate.local/api/mod?page=' + page).then((data) => {
-          this.mods = data.data;
-          window.history.pushState('', '', 'store?page=' + page);
-        });
-      }
-    }
-  };
+			if (page === 0) {
+				page = 1;
+			}
+			return {mods, page};
+		},
+		components: {
+			modificationBlock,
+		},
+		data: () => ({
+			page: 1,
+			mods: [],
+			items: [
+				{
+					text: 'Главная страница',
+					disabled: false,
+					to: '/',
+				},
+				{
+					text: 'Магазин скриптов',
+				},
+			],
+		}),
+		computed: {
+			isLogin() {
+				return this.$store.state.profile ? true : false;
+			},
+		},
+		methods: {
+			onPageChange(page) {
+				this.$axios.get('http://dev.fastdonate.local/api/mod?page=' + page).then((data) => {
+					this.mods = data.data;
+					window.history.pushState('', '', 'store?page=' + page);
+				});
+			},
+		},
+	};
 </script>
 
 <style scoped>

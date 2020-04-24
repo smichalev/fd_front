@@ -11,11 +11,11 @@ export default {
     meta: [
       {charset: 'utf-8'},
       {name: 'viewport', content: 'width=device-width, initial-scale=1'},
-      {hid: 'description', name: 'description', content: process.env.npm_package_description || ''}
+      {hid: 'description', name: 'description', content: process.env.npm_package_description || ''},
     ],
     link: [
-      {rel: 'shortcut icon', type: 'image/png', href: '/favicon.png'}
-    ]
+      {rel: 'shortcut icon', type: 'image/png', href: '/favicon.png'},
+    ],
   },
   /*
   ** Customize the progress-bar color
@@ -33,8 +33,13 @@ export default {
   ** Nuxt.js dev-modules
   */
   buildModules: [
-    '@nuxtjs/vuetify'
+    '@nuxtjs/moment',
+    '@nuxtjs/vuetify',
   ],
+  moment: {
+    defaultLocale: 'en',
+    locales: ['ru'],
+  },
   /*
   ** Nuxt.js modules
   */
@@ -46,8 +51,8 @@ export default {
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: false
-    }
+      dark: false,
+    },
   },
   /*
   ** Build configuration
@@ -59,6 +64,6 @@ export default {
     ** You can extend webpack config here
     */
     extend(config, ctx) {
-    }
-  }
+    },
+  },
 };
