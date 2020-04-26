@@ -1,5 +1,6 @@
 <template>
   <div>
+    <v-btn @click="$router.push('/settings')">go</v-btn>
     <v-container fluid style="width: 100%" class="mb-4">
       <div class="panel panel-primary">
         <div class="list-group row">
@@ -7,7 +8,8 @@
             <v-card color="#00a65a" dark elevation="0" dense class="px-1">
               <div class="d-flex flex-no-wrap">
                 <v-icon size="70">mdi-cash</v-icon>
-                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;" class="mr-2">
+                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;"
+                     class="mr-2">
                   <div style="display: flex; flex-direction: column">
                     <div>
                       Личный счет
@@ -25,7 +27,8 @@
             <v-card color="#0c42ae" dark elevation="0" dense class="px-1">
               <div class="d-flex flex-no-wrap">
                 <v-icon size="70">mdi-cash</v-icon>
-                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;" class="mr-2">
+                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;"
+                     class="mr-2">
                   <div style="display: flex; flex-direction: column">
                     <div>
                       Партнерский счет
@@ -43,10 +46,11 @@
             <v-card color="#ffa636" dark elevation="0" dense class="px-1">
               <div class="d-flex flex-no-wrap">
                 <v-icon size="70">mdi-cash</v-icon>
-                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;" class="mr-2">
+                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;"
+                     class="mr-2">
                   <div style="display: flex; flex-direction: column">
                     <div>
-                     Реферальная система
+                      Реферальная система
                     </div>
                     <div class="font-weight-bold">
                       0
@@ -65,6 +69,6 @@
 
 <script>
 	export default {
-		data: () => ({})
+		data: () => ({}),
 	};
 </script>

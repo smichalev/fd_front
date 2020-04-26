@@ -88,80 +88,88 @@
 				this.$axios.get('http://dev.fastdonate.local/api/events?page=' + this.page, {
 					headers: {Authorization: `${ localStorage.getItem('token') }`},
 				}).then((data) => {
-					if (data.data.events.length) {
-						data.data.events.forEach((item) => {
-							let content, color, timestamp, size, type, link;
-							timestamp = item.createdAt;
-							size = 'large';
-							if (item.type === "RECRUIT") {
-								type = "RECRUIT";
-								content = this.$store.state.lang === 'ru'
-								          ? 'Добро пожаловать! Вы впервые авторизовались на нашем ресурсе. Если у Вас будут какие то вопросы, то они доступны по ссылке снизу'
-								          : 'Welcome! You first logged in to our resource. If you have any questions, they are available at the link below';
-								color = '#0bbd87';
-								link = {
-									title: 'FAQ',
-									href: '/help',
-									color: '#0bbd87',
-								};
-							}
-							if (item.type === "AUTHORIZATION") {
-								type = "AUTHORIZATION";
-								content = this.$store.state.lang === 'ru' ? 'Авторизация' : 'Authorization';
-								color = '#0bbd87';
-							}
-							if (item.type === "LOGOUT") {
-								type = "LOGOUT";
-								content = this.$store.state.lang === 'ru' ? 'Выход из аккаунта' : 'Logout';
-								color = '#ffc624';
-							}
-							if (item.type === "POST_MOD") {
-								type = "POST_MOD";
-								content = this.$store.state.lang === 'ru'
-								          ? 'Вы добавили новую модификацию'
-								          : 'You added new modification';
-								color = '#8d0cde';
-								link = {
-									title: item.data.title,
-									href: '/store/' + item.data.id,
-									color: '#8d0cde',
-								};
-							}
-							let obj = {};
-							if (content) {
-								obj.content = content;
-							}
-							if (color) {
-								obj.color = color;
-							}
-							if (timestamp) {
-								obj.timestamp = timestamp;
-							}
-							if (size) {
-								obj.size = size;
-							}
-							if (type) {
-								obj.type = type;
-							}
-							if (link) {
-								obj.link = link;
-							}
-							this.activities.push(obj);
-						});
-					}
-					this.count = data.data.count;
-					this.loading = false;
-					this.disabled = false;
-					this.viewCount = this.viewCount + data.data.events.length;
-				}).catch((err) => {
-					this.loading = false;
-					this.$notify({
-						title: 'Ошибка',
-						message: err.response.data.message,
-						type: 'error',
-						position: 'bottom-right',
-					});
-				});
+					    if (data.data.events.length) {
+						    data.data.events.forEach((item) => {
+							    let content, color, timestamp, size, type, link;
+							    timestamp = item.createdAt;
+							    size = 'large';
+							    if (item.type === "RECRUIT") {
+								    type = "RECRUIT";
+								    content = this.$store.state.lang === 'ru'
+								              ? 'Добро пожаловать! Вы впервые авторизовались на нашем ресурсе. Если у Вас будут какие то вопросы, то они доступны по ссылке снизу'
+								              : 'Welcome! You first logged in to our resource. If you have any questions, they are available at the link below';
+								    color = '#0bbd87';
+								    link = {
+									    title: 'FAQ',
+									    href: '/help',
+									    color: '#0bbd87',
+								    };
+							    }
+							    if (item.type === "AUTHORIZATION") {
+								    type = "AUTHORIZATION";
+								    content = this.$store.state.lang === 'ru' ? 'Авторизация' : 'Authorization';
+								    color = '#0bbd87';
+							    }
+							    if (item.type === "LOGOUT") {
+								    type = "LOGOUT";
+								    content = this.$store.state.lang === 'ru' ? 'Выход из аккаунта' : 'Logout';
+								    color = '#ffc624';
+							    }
+							    if (item.type === "POST_MOD") {
+								    type = "POST_MOD";
+								    content = this.$store.state.lang === 'ru'
+								              ? 'Вы добавили новую модификацию'
+								              : 'You added new modification';
+								    color = '#8d0cde';
+								    link = {
+									    title: item.data.title,
+									    href: '/store/' + item.data.id,
+									    color: '#8d0cde',
+								    };
+							    }
+							    let obj = {};
+							    if (content) {
+								    obj.content = content;
+							    }
+							    if (color) {
+								    obj.color = color;
+							    }
+							    if (timestamp) {
+								    obj.timestamp = timestamp;
+							    }
+							    if (size) {
+								    obj.size = size;
+							    }
+							    if (type) {
+								    obj.type = type;
+							    }
+							    if (link) {
+								    obj.link = link;
+							    }
+							    this.activities.push(obj);
+						    });
+					    }
+					    this.count = data.data.count;
+					    this.loading = false;
+					    this.disabled = false;
+					    this.viewCount = this.viewCount + data.data.events.length;
+				    })
+				    .then(() => {
+					    this.$axios.get('http://dev.fastdonate.local/api/events/count', {
+						    headers: {Authorization: `${ localStorage.getItem('token') }`},
+					    }).then((count) => {
+						    this.$store.commit('notification', +count.data.count);
+					    });
+				    })
+				    .catch((err) => {
+					    this.loading = false;
+					    this.$notify({
+						    title: 'Ошибка',
+						    message: err.response.data.message,
+						    type: 'error',
+						    position: 'bottom-right',
+					    });
+				    });
 			},
 			loadMore() {
 				this.page++;

@@ -23,14 +23,8 @@
         </v-btn>
         <div style="display: flex; align-items: center">
           <v-toolbar-items v-if="login" style="height: 48px;">
-            <v-btn v-on="on" color="#0c42ae" dark elevation="0" @click="$router.push({path: '/events'})">
-              <v-badge
-                color="error"
-                content="6"
-                overlap
-              >
-                <v-icon>mdi-bell</v-icon>
-              </v-badge>
+            <v-btn color="#0c42ae" dark elevation="0" @click="$router.push({path: '/events'})">
+              {{ $store.state.notification }}
             </v-btn>
           </v-toolbar-items>
 
@@ -149,7 +143,6 @@
 				});
 			},
 		},
-		watch: {},
 		computed: {
 			isLogin() {
 				return this.$store.state.profile ? true : false;
@@ -157,22 +150,28 @@
 		},
 		mounted() {
 			if (localStorage.getItem('token')) {
-				this.$axios.get('http://dev.fastdonate.local/api/profile', {
-					    headers: {Authorization: `${ localStorage.getItem('token') }`},
-				    })
-				    .then((data) => {
-					    this.loading = false;
-					    if (data.data.profile !== {}) {
-						    this.$store.commit('login', data.data.profile);
-						    this.profile = data.data.profile;
-						    this.login = true;
-					    }
-				    })
-				    .catch(() => {
-					    this.loading = false;
-					    this.login = false;
-					    this.logout();
-				    });
+				Promise.all([
+					       this.$axios.get('http://dev.fastdonate.local/api/profile', {
+						       headers: {Authorization: `${ localStorage.getItem('token') }`},
+					       }),
+					       this.$axios.get('http://dev.fastdonate.local/api/events/count', {
+						       headers: {Authorization: `${ localStorage.getItem('token') }`},
+					       }),
+				       ])
+				       .then(([data, count]) => {
+					       this.loading = false;
+					       if (data.data.profile !== {}) {
+						       this.$store.commit('login', data.data.profile);
+						       this.profile = data.data.profile;
+						       this.login = true;
+						       this.$store.commit('notification', +count.data.count);
+					       }
+				       })
+				       .catch(() => {
+					       this.loading = false;
+					       this.login = false;
+					       this.logout();
+				       });
 			}
 			else {
 				this.loading = false;

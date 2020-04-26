@@ -1,16 +1,10 @@
 <template>
   <div>
     <v-container fluid style="width: 100%" class="mb-4">
-      <div class="d-flex justify-space-between" style="align-items: center">
-        <div class="d-flex" style="align-items: center">
-          <div class="title">Для сервера</div>
-        </div>
-      </div>
-      <v-breadcrumbs :items="breadcrumbs" small class="mx-0 my-0 px-0 py-2"></v-breadcrumbs>
-      <v-card class="mx-auto"
-              outlined>
+      <headerPage :breadcrumbs="breadcrumbs" :titlePage="titlePage"></headerPage>
+      <v-card outlined class="mt-3">
         <v-card-text>
-          Для сервера
+          For server
         </v-card-text>
       </v-card>
     </v-container>
@@ -18,20 +12,49 @@
 </template>
 
 <script>
+	import headerPage from "../../components/headerPage";
+
+	let language = {
+		ru: {
+			serverList: 'Для сервера',
+			homePage: 'Главная страница',
+		},
+		en: {
+			serverList: 'For server',
+			homePage: 'Home page',
+		},
+	};
 	export default {
-		data: () => ({
-			breadcrumbs: [
-				{
-					text: 'Главная страница',
-					disabled: false,
-					to: '/'
-				},
-				{
-					text: 'Для сервера',
-					disabled: true,
-					to: '/forserver'
-				}
-			]
-		})
-	}
+		components: {
+			headerPage,
+		},
+		data() {
+			return {
+				titlePage: language[this.$store.state.lang].serverList,
+				breadcrumbs: [
+					{
+						text: language[this.$store.state.lang].homePage,
+						disabled: false,
+						to: '/',
+					},
+					{
+						text: language[this.$store.state.lang].serverList,
+						disabled: true,
+					},
+				],
+			};
+		},
+		watch: {
+			lang(selectedLang) {
+				this.titlePage = language[selectedLang].serverList;
+				this.breadcrumbs[0].text = language[selectedLang].homePage;
+				this.breadcrumbs[1].text = language[selectedLang].serverList;
+			},
+		},
+		computed: {
+			lang() {
+				return this.$store.state.lang;
+			},
+		},
+	};
 </script>

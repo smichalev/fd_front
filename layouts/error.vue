@@ -19,7 +19,7 @@
           <div class="display-1" v-if="error.statusCode === 415">Unsupported Media Type</div>
           <div class="display-1" v-if="error.statusCode === 500">Internal Server Error</div>
           <div class="display-1" v-if="error.statusCode === 501">Not Implemented</div>
-          <div class="text">{{ error.message.message }}</div>
+          <div class="text">{{ error.message }}</div>
           <NuxtLink to="/">
             Вернуться на главную страницу
           </NuxtLink>

@@ -4,7 +4,7 @@
       <div class="title">{{ titlePage }}</div>
       <v-breadcrumbs :items="breadcrumbs" small class="mx-0 my-0 px-0 pt-2 pb-0"></v-breadcrumbs>
     </div>
-    <div v-if="button && Object.keys(button).length">
+    <div v-if="button && Object.keys(button).length && $store.state.profile">
       <v-btn elevation="0" color="success" @click="$router.push({path: button.link})" v-if="button.link">
         <v-icon v-if="button.icon">{{ button.icon }}</v-icon>
         <span class="desktop" v-if="button.title">{{ button.title }}</span>
@@ -27,3 +27,25 @@
 		},
 	};
 </script>
+
+<style scoped>
+  @media (max-width: 1264px) {
+    .desktop {
+      display: none;
+    }
+
+    .mobile {
+      display: block;
+    }
+  }
+
+  @media (min-width: 1264px) {
+    .desktop {
+      display: block;
+    }
+
+    .mobile {
+      display: none;
+    }
+  }
+</style>

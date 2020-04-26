@@ -1,14 +1,12 @@
 <template>
   <div class="mt-2 d-flex justify-center">
-    <div v-for="(lang, i) in language" :key="i">
+    <div v-for="lang in language" :key="lang.code">
       <div class="px-2 py-1 d-flex ml-2 lang-block lang-block-active" v-if="lang.active">
-        <img
-          :src="lang.images" alt="" style="max-height: 30px"><span
+        <img :src="lang.images"><span
         class="ml-1">{{ lang.title }}</span>
       </div>
       <div class="px-2 py-1 d-flex ml-2 lang-block" v-if="!lang.active" @click="changeLang(lang.code)"><img
-        :src="lang.images"
-        alt="" style="max-height: 30px"><span
+        :src="lang.images"><span
         class="ml-1">{{ lang.title }}</span>
       </div>
     </div>
@@ -37,24 +35,19 @@
 		},
 		methods: {
 			changeLang(lang) {
-				if (lang === 'ru') {
-					this.$axios.post('http://dev.fastdonate.local/api/lang', {
-						lang,
-					}).then(() => {
-						this.$store.commit('changeLang', 'ru');
+				this.$axios.post('http://dev.fastdonate.local/api/lang', {
+					lang,
+				}).then(() => {
+					if (lang === 'ru') {
 						this.language[0].active = true;
 						this.language[1].active = false;
-					});
-				}
-				if (lang === 'en') {
-					this.$axios.post('http://dev.fastdonate.local/api/lang', {
-						lang,
-					}).then(() => {
-						this.$store.commit('changeLang', 'en');
+					}
+					if (lang === 'en') {
 						this.language[0].active = false;
 						this.language[1].active = true;
-					});
-				}
+					}
+					this.$store.commit('changeLang', lang);
+				});
 			},
 		},
 		mounted() {

@@ -11,6 +11,11 @@ export const mutations = {
     state.profile = null;
   },
   changeLang(state, lang) {
-    state.lang = lang;
+    if (lang === 'ru' || lang === 'en') {
+      state.lang = lang;
+    }
+  },
+  notification(state, count) {
+    state.notification = count;
   },
 };
