@@ -1,6 +1,5 @@
 <template>
   <div>
-    <v-btn @click="$router.push('/settings')">go</v-btn>
     <v-container fluid style="width: 100%" class="mb-4">
       <div class="panel panel-primary">
         <div class="list-group row">
@@ -69,6 +68,8 @@
 
 <script>
 	export default {
+		components: {
+		},
 		data: () => ({}),
 	};
 </script>

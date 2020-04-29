@@ -155,70 +155,78 @@
           </div>
         </v-card-text>
       </v-card>
-      <Comments class="mt-4" :idmod="mod.mod.id"></Comments>
+      <v-card outlined class="mt-4" id="comments">
+        <div style="background: #0c42ae; color: #fff; font-size: 18px" class="px-4 py-1">
+          Комментарии
+        </div>
+        <comment_system></comment_system>
+      </v-card>
     </v-container>
   </div>
 </template>
 
 <script>
-  import Comments from '../../components/modification/comments';
-  import formatDate from '../../components/modification/formatDate';
+	import formatDate from '../../components/modification/formatDate';
+	import comment_system from '../../components/comment/index';
 
-  export default {
-    async asyncData({$axios, route, params, error}) {
-      let mod, breadcrumbs;
-      try {
-        mod = await $axios.$get(`http://dev.fastdonate.local/api/mod/${ params.id }`);
-      }
-      catch (e) {
-        error({statusCode: e.response.status, message: e.response.data});
-      }
-      breadcrumbs = [
-        {
-          text: 'Главная страница',
-          disabled: false,
-          to: '/'
-        },
-        {
-          text: 'Магазин скриптов',
-          disabled: false,
-          to: '/'
-        }
-      ];
-      if (route.hash) {
-        breadcrumbs[1].to = '../../store';
-      }
-      if (mod && mod.mod && mod.mod.title) {
-        breadcrumbs.push({
-          text: mod.mod.title
-        });
-      }
-      return {mod, breadcrumbs};
-    },
-    components: {
-      Comments,
-      formatDate
-    },
-    data() {
-      return {};
-    },
-    methods: {
-      removeMod() {
-        this.$axios.delete('http://dev.fastdonate.local/api/mod/' + params.id, {
-          headers: {Authorization: `${ localStorage.getItem('token') }`, 'Content-Type': 'multipart/form-data'}
-        });
-      }
-    },
-    mounted() {
-      if (this.$route.hash && this.$route.hash === '#comments') {
-        this.$vuetify.goTo('#comments', {
-            duration: 500,
-            offset: 0
-          }
-        );
-      }
-    }
-  };
+	export default {
+		async asyncData({$axios, route, params, error}) {
+			let mod, breadcrumbs;
+			try {
+				mod = await $axios.$get(`http://dev.fastdonate.local/api/mod/${ params.id }`);
+			}
+			catch (e) {
+				error({statusCode: e.response.status, message: e.response.data});
+			}
+			breadcrumbs = [
+				{
+					text: 'Главная страница',
+					disabled: false,
+					to: '/',
+				},
+				{
+					text: 'Магазин скриптов',
+					disabled: false,
+					to: '/',
+				},
+			];
+			if (route.hash) {
+				breadcrumbs[1].to = '../../store';
+			}
+			if (mod && mod.mod && mod.mod.title) {
+				breadcrumbs.push({
+					text: mod.mod.title,
+				});
+			}
+			return {mod, breadcrumbs};
+		},
+		components: {
+			formatDate,
+			comment_system,
+		},
+		data() {
+			return {};
+		},
+		methods: {
+			removeMod() {
+				this.$axios.delete('http://dev.fastdonate.local/api/mod/' + params.id, {
+					headers: {
+						Authorization: `${ localStorage.getItem('token') }`,
+						'Content-Type': 'multipart/form-data',
+					},
+				});
+			},
+		},
+		mounted() {
+			if (this.$route.hash && this.$route.hash === '#comments') {
+				this.$vuetify.goTo('#comments', {
+						duration: 500,
+						offset: 0,
+					},
+				);
+			}
+		},
+	};
 </script>
 
 <style scoped>

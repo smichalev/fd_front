@@ -15,6 +15,11 @@ export const mutations = {
       state.lang = lang;
     }
   },
+  changeParam(state, param, value) {
+    if (state.profile && state.profile !== {}) {
+      state.profile[param] = value;
+    }
+  },
   notification(state, count) {
     state.notification = count;
   },

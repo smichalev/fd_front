@@ -70,11 +70,18 @@
 				});
 			}
 		},
+		mounted() {
+			if (this.$store.state.profile) {
+				this.POST_MOD = this.$store.state.profile.notify_post_mod;
+				this.LOGOUT = this.$store.state.profile.notify_logout;
+				this.AUTHORIZATION = this.$store.state.profile.notify_authorization;
+			}
+		},
 		data() {
 			return {
-				AUTHORIZATION: true,
-				POST_MOD: true,
-				LOGOUT: true,
+				AUTHORIZATION: false,
+				POST_MOD: false,
+				LOGOUT: false,
 				textAUTHORIZATION: language[this.$store.state.lang].AUTHORIZATION,
 				textPOST_MOD: language[this.$store.state.lang].POST_MOD,
 				textLOGOUT: language[this.$store.state.lang].LOGOUT,
@@ -109,17 +116,34 @@
 				this.textSettingsNotify = language[selectedLang].settingsNotify;
 			},
 			AUTHORIZATION(newValue) {
-				console.log('AUTHORIZATION' + newValue);
+				this.$axios.post('http://dev.fastdonate.local/api/events', {
+					event: 'AUTHORIZATION',
+				}, {
+					headers: {Authorization: `${ localStorage.getItem('token') }`},
+				}).then(() => {
+					this.$store.commit('changeParam', 'notify_authorization', newValue);
+				});
 			},
 			POST_MOD(newValue) {
-				console.log('POST_MOD' + newValue);
+				this.$axios.post('http://dev.fastdonate.local/api/events', {
+					event: 'POST_MOD',
+				}, {
+					headers: {Authorization: `${ localStorage.getItem('token') }`},
+				}).then(() => {
+					this.$store.commit('changeParam', 'notify_post_mod', newValue);
+				});
 			},
 			LOGOUT(newValue) {
-				console.log('LOGOUT' + newValue);
+				this.$axios.post('http://dev.fastdonate.local/api/events', {
+					event: 'LOGOUT',
+				}, {
+					headers: {Authorization: `${ localStorage.getItem('token') }`},
+				}).then(() => {
+					this.$store.commit('changeParam', 'notify_logout', newValue);
+				});
 			},
 		},
 		computed: {
-
 			profile() {
 				return this.$store.state.profile;
 			},

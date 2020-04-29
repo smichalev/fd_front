@@ -5,11 +5,13 @@ import {
   Notification,
   Rate,
   Timeline,
-  TimelineItem
+  TimelineItem,
+  Tooltip
 } from 'element-ui';
 
 Vue.use(Rate);
 Vue.use(Timeline);
 Vue.use(TimelineItem);
+Vue.use(Tooltip);
 
 Vue.prototype.$notify = Notification;
