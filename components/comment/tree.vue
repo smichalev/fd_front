@@ -1,23 +1,25 @@
 <template>
-  <div class="d-flex mt-3 mb-4" style="align-items: center;" v-if="hide" @click="loadMore">
-    <v-btn elevation="0" x-small style="min-width: 25px; min-height: 30px">
-      <v-icon size="14">mdi-plus</v-icon>
-    </v-btn>
-    <div class="comment-reply ml-2">{{ reply }} {{ countReply(reply) }}</div>
+  <div v-if="hide">
+    <div class="d-flex mt-3 mb-4" style="align-items: center;" @click="loadMore">
+      <v-btn elevation="0" x-small style="min-width: 25px; min-height: 30px">
+        <v-icon size="14">mdi-plus</v-icon>
+      </v-btn>
+      <div class="comment-reply ml-2">{{ reply }} {{ countReply(reply) }}</div>
+    </div>
   </div>
   <div v-else>
     <div class="mb-4 mt-1">
       <div class="d-flex">
         <div class="comment-history">
-          <v-btn elevation="0" x-small style="min-width: 25px; min-height: 30px" @click="close">
+          <v-btn elevation="0" x-small style="min-width: 25px; min-height: 30px" @click="hide = !hide">
             <v-icon size="14">mdi-minus</v-icon>
           </v-btn>
-          <div class="comment-line" @click="close"></div>
+          <div class="comment-line" @click="hide = !hide"></div>
         </div>
         <div style="width: 100%">
-          <div class="comment-tree my-2" v-for="(item, index) in data">
-            <comment :comment="item" :id="'comment-'+ ++index" :list="list"></comment>
-            <tree v-if="item.reply > 0" :data="item.child" :reply="item.reply" :list="list"></tree>
+          <div class="comment-tree my-2" v-for="(item, index) in test">
+            <comment :comment="item" :id="'comment-'+ ++index" :list="list" :index="index"></comment>
+            <tree v-if="item.reply > 0" :data="item.child" :reply="item.reply" :list="list" :parent="item.id"></tree>
           </div>
         </div>
       </div>
@@ -34,6 +36,7 @@
 		data() {
 			return {
 				hide: true,
+				test: [],
 			};
 		},
 		components: {
@@ -42,7 +45,6 @@
 		methods: {
 			close() {
 				this.hide = true;
-				console.log(this.hide);
 			},
 			loadMore() {
 				this.$axios.get('http://dev.fastdonate.local/api/comment/' + this.$route.params.id + '/' + this.parent,
@@ -55,9 +57,10 @@
 							Authorization: `${ localStorage.getItem('token') }`,
 						},
 					}).then((data) => {
-					this.list[this.index].child = data.data.comments;
 					this.hide = false;
-					console.log(this.hide);
+					this.test = data.data.comments;
+					data.data.comments.child = [];
+					this.list[this.index].child = data.data.comments;
 				});
 			},
 			countReply: (number) => {

@@ -16,7 +16,7 @@
       <div class="my-4 mx-4" v-if="loaded">
         <div v-if="comments.length > 0">
           <template v-for="(comment, index) in comments">
-            <comment :id="'comment-'+ index" class="my-2" :comment="comment" :list="comments"></comment>
+            <comment :id="'comment-'+ index" class="my-2" :comment="comment" :list="comments" :index="index"></comment>
             <tree v-if="comment.reply > 0" :data="comment.child" :reply="comment.reply" :list="comments"
                   :parent="comment.id" :index="index"></tree>
           </template>
@@ -86,6 +86,7 @@
 						role: this.$store.state.profile.role,
 						avatar: this.$store.state.profile.avatar,
 					};
+					data.data.comments.child = [];
 					this.comments.push(data.data.comments);
 					this.message = '';
 				});

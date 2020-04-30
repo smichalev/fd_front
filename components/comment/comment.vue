@@ -31,7 +31,7 @@
     </div>
     <div v-if="message" class="mt-3">
       <div class="d-flex" style="align-items: center">
-        <v-avatar size="50">
+        <v-avatar size="50" v-if="$store.state.profile && $store.state.profile.avatar">
           <v-img
             :src="$store.state.profile.avatar"></v-img>
         </v-avatar>
@@ -48,7 +48,7 @@
 
 <script>
 	export default {
-		props: ['comment', 'list'],
+		props: ['comment', 'list', 'index'],
 		data() {
 			return {
 				msg: '',
@@ -80,8 +80,11 @@
 						role: this.$store.state.profile.role,
 						avatar: this.$store.state.profile.avatar,
 					};
+					data.data.comments.child = [];
 
+					this.list[this.index].reply = this.list[this.index].reply + 1;
 					this.msg = '';
+					this.message = !this.message;
 				});
 			},
 		},
