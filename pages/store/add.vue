@@ -115,147 +115,147 @@
 </template>
 
 <script>
-  let requiredMsg = 'Это поле обязательно к заполнению';
-  let hashtagMsg = 'Такой хештег уже есть';
-  export default {
-    middleware: 'login',
-    data: () => ({
-      dialog: false,
-      loading: false,
-      data: null,
-      title: '',
-      pic: null,
-      fileImage: null,
-      fileMod: null,
-      description: '',
-      version: '',
-      price: '',
-      hashtag: '',
-      hashtags: [],
-      discount: null,
-      breadcrumbs: [
-        {
-          text: 'Главная страница',
-          disabled: false,
-          to: '/'
-        },
-        {
-          text: 'Магазин скриптов',
-          disabled: false,
-          to: './#'
-        },
-        {
-          text: 'Добавить новый скрипт'
-        }
-      ],
-      valid: true,
-      titleRules: [
-        v => !!v || requiredMsg
-      ],
-      versionRules: [
-        v => !!v || requiredMsg
-      ],
-      descriptionRules: [
-        v => !!v || requiredMsg
-      ],
-      priceRules: [
-        v => !!v || requiredMsg
-      ]
-    }),
-    watch: {
-      fileImage: function(data) {
-        if (data && (data.type === 'image/png' || data.type === 'image/jpeg')) {
-          this.pic = URL.createObjectURL(data);
-        }
-        else {
-          this.pic = null;
-        }
-      }
-    },
-    methods: {
-      removetag(tag) {
-        this.hashtags = this.hashtags.filter((item) => item !== tag);
-      },
-      addhashtag() {
-        this.hashtag = this.hashtag.replace(/[^0-9-a-zA-ZА-Яа-яЁё]/gi, '').replace(/\s+/gi, ', ');
-        if (this.hashtag.length > 60) {
-          return this.$notify({
-            title: 'Ошибка',
-            message: 'Длина хештега не может быть больше 60 символов!',
-            type: 'error',
-            position: 'bottom-right'
-          });
-        }
-        if (this.hashtag.length) {
-          if (!!~this.hashtags.indexOf(this.hashtag)) {
-            this.$notify({
-              title: 'Ошибка',
-              message: hashtagMsg,
-              type: 'error',
-              position: 'bottom-right'
-            });
-          }
-          else {
-            this.hashtags.push(this.hashtag);
-          }
-          this.hashtag = '';
-        }
-        else {
-          this.$notify({
-            title: 'Ошибка',
-            message: 'Хештег может состоять только из букв и цифр',
-            type: 'error',
-            position: 'bottom-right'
-          });
-        }
-      },
-      onlyNumber($event) {
-        let keyCode = ($event.keyCode ? $event.keyCode : $event.which);
-        if ((keyCode < 48 || keyCode > 57) && keyCode !== 46 && keyCode !== 191) {
-          $event.preventDefault();
-        }
-      },
-      send() {
-        this.loading = true;
+	let requiredMsg = 'Это поле обязательно к заполнению';
+	let hashtagMsg = 'Такой хештег уже есть';
+	export default {
+		middleware: 'login',
+		data: () => ({
+			dialog: false,
+			loading: false,
+			data: null,
+			title: '',
+			pic: null,
+			fileImage: null,
+			fileMod: null,
+			description: '',
+			version: '',
+			price: '',
+			hashtag: '',
+			hashtags: [],
+			discount: null,
+			breadcrumbs: [
+				{
+					text: 'Главная страница',
+					disabled: false,
+					to: '/',
+				},
+				{
+					text: 'Магазин скриптов',
+					disabled: false,
+					to: './#',
+				},
+				{
+					text: 'Добавить новый скрипт',
+				},
+			],
+			valid: true,
+			titleRules: [
+				v => !!v || requiredMsg,
+			],
+			versionRules: [
+				v => !!v || requiredMsg,
+			],
+			descriptionRules: [
+				v => !!v || requiredMsg,
+			],
+			priceRules: [
+				v => !!v || requiredMsg,
+			],
+		}),
+		watch: {
+			fileImage: function(data) {
+				if (data && (data.type === 'image/png' || data.type === 'image/jpeg')) {
+					this.pic = URL.createObjectURL(data);
+				}
+				else {
+					this.pic = null;
+				}
+			},
+		},
+		methods: {
+			removetag(tag) {
+				this.hashtags = this.hashtags.filter((item) => item !== tag);
+			},
+			addhashtag() {
+				this.hashtag = this.hashtag.replace(/[^0-9-a-zA-ZА-Яа-яЁё]/gi, '').replace(/\s+/gi, ', ');
+				if (this.hashtag.length > 60) {
+					return this.$notify({
+						title: 'Ошибка',
+						message: 'Длина хештега не может быть больше 60 символов!',
+						type: 'error',
+						position: 'bottom-right',
+					});
+				}
+				if (this.hashtag.length) {
+					if (!!~this.hashtags.indexOf(this.hashtag)) {
+						this.$notify({
+							title: 'Ошибка',
+							message: hashtagMsg,
+							type: 'error',
+							position: 'bottom-right',
+						});
+					}
+					else {
+						this.hashtags.push(this.hashtag);
+					}
+					this.hashtag = '';
+				}
+				else {
+					this.$notify({
+						title: 'Ошибка',
+						message: 'Хештег может состоять только из букв и цифр',
+						type: 'error',
+						position: 'bottom-right',
+					});
+				}
+			},
+			onlyNumber($event) {
+				let keyCode = ($event.keyCode ? $event.keyCode : $event.which);
+				if ((keyCode < 48 || keyCode > 57) && keyCode !== 46 && keyCode !== 191) {
+					$event.preventDefault();
+				}
+			},
+			send() {
+				this.loading = true;
 
-        let formData = new FormData();
-        if (this.fileMod) {
-          formData.append('mod', this.fileMod);
-        }
-        if (this.fileImage) {
-          formData.append('image', this.fileImage);
-        }
-        formData.set('title', this.title);
-        formData.set('description', this.description);
-        formData.set('version', this.version);
-        formData.set('price', this.price);
-        formData.set('discount', this.discount);
-        formData.set('hash', this.hashtags);
+				let formData = new FormData();
+				if (this.fileMod) {
+					formData.append('mod', this.fileMod);
+				}
+				if (this.fileImage) {
+					formData.append('image', this.fileImage);
+				}
+				formData.set('title', this.title);
+				formData.set('description', this.description);
+				formData.set('version', this.version);
+				formData.set('price', this.price);
+				formData.set('discount', this.discount);
+				formData.set('hash', this.hashtags);
 
-        this.$axios.post('http://dev.fastdonate.local/api/mod', formData, {
-            headers: {Authorization: `${ localStorage.getItem('token') }`, 'Content-Type': 'multipart/form-data'}
-          })
-          .then((data) => {
-            let idmod = data.data.mod.id;
-            this.$notify({
-              title: 'Успешно',
-              message: 'Модификация успешно добавлена',
-              type: 'success',
-              position: 'bottom-right'
-            });
-            this.$router.push('/store/' + idmod);
-          }).catch((err) => {
-            this.$notify({
-              title: 'Ошибка',
-              message: err.response.data.message,
-              type: 'error',
-              position: 'bottom-right'
-            });
-          })
-          .finally(() => this.loading = false);
-      }
-    }
-  };
+				this.$axios.post('http://dev.fastdonate.local/api/mod', formData, {
+					    headers: {'Content-Type': 'multipart/form-data'},
+				    })
+				    .then((data) => {
+					    let idmod = data.data.mod.id;
+					    this.$notify({
+						    title: 'Успешно',
+						    message: 'Модификация успешно добавлена',
+						    type: 'success',
+						    position: 'bottom-right',
+					    });
+					    this.$router.push('/store/' + idmod);
+				    }).catch((err) => {
+					    this.$notify({
+						    title: 'Ошибка',
+						    message: err.response.data.message,
+						    type: 'error',
+						    position: 'bottom-right',
+					    });
+				    })
+				    .finally(() => this.loading = false);
+			},
+		},
+	};
 </script>
 
 <style scoped>

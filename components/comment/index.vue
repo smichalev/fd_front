@@ -74,11 +74,6 @@
 					{
 						id: this.$route.params.id,
 						text: this.message,
-					},
-					{
-						headers: {
-							Authorization: `${ localStorage.getItem('token') }`,
-						},
 					}).then((data) => {
 					data.data.comments.Creator = {
 						id: this.$store.state.profile.id,
@@ -93,11 +88,7 @@
 			},
 		},
 		mounted() {
-			this.$axios.get('http://dev.fastdonate.local/api/comment/' + this.$route.params.id, {
-				headers: {
-					Authorization: `${ localStorage.getItem('token') }`,
-				},
-			}).then((data) => {
+			this.$axios.get('http://dev.fastdonate.local/api/comment/' + this.$route.params.id).then((data) => {
 				this.comments = data.data.comments;
 				this.comments.forEach((item) => {
 					item.child = [];

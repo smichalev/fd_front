@@ -130,8 +130,6 @@
 					version: this.version,
 					price: this.price,
 					discount: this.discount
-				}, {
-					headers: {Authorization: `${ localStorage.getItem('token') }`}
 				}).then((data) => {
 					this.$notify({
 						title: 'Успешно',

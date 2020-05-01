@@ -61,15 +61,16 @@
 		components: {
 			headerPage,
 		},
-		async asyncData({$axios, error, store}) {
-			let result = await $axios.$get('http://dev.fastdonate.local/api/login');
-			if (!result.result) {
-				error({
-					statusCode: 401,
-					message: store.state.lang === 'ru' ? 'Вы не авторизованны' : 'Your not authorized',
-				});
-			}
-		},
+	  async asyncData({$axios, error, store}) {
+		  let result = await $axios.$get('http://dev.fastdonate.local/api/login');
+		  if (!result.result) {
+			  let lang = await $axios.$get('http://dev.fastdonate.local/api/lang');
+			  error({
+				  statusCode: 401,
+				  message: lang.lang === 'ru' ? 'Вы не авторизованны' : 'Your not authorized',
+			  });
+		  }
+	  },
 		mounted() {
 			if (this.$store.state.profile) {
 				this.POST_MOD = this.$store.state.profile.notify_post_mod;
@@ -118,8 +119,6 @@
 			AUTHORIZATION(newValue) {
 				this.$axios.post('http://dev.fastdonate.local/api/events', {
 					event: 'AUTHORIZATION',
-				}, {
-					headers: {Authorization: `${ localStorage.getItem('token') }`},
 				}).then(() => {
 					this.$store.commit('changeParam', 'notify_authorization', newValue);
 				});
@@ -127,8 +126,6 @@
 			POST_MOD(newValue) {
 				this.$axios.post('http://dev.fastdonate.local/api/events', {
 					event: 'POST_MOD',
-				}, {
-					headers: {Authorization: `${ localStorage.getItem('token') }`},
 				}).then(() => {
 					this.$store.commit('changeParam', 'notify_post_mod', newValue);
 				});
@@ -136,8 +133,6 @@
 			LOGOUT(newValue) {
 				this.$axios.post('http://dev.fastdonate.local/api/events', {
 					event: 'LOGOUT',
-				}, {
-					headers: {Authorization: `${ localStorage.getItem('token') }`},
 				}).then(() => {
 					this.$store.commit('changeParam', 'notify_logout', newValue);
 				});

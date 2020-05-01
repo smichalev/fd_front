@@ -121,8 +121,6 @@
         this.loadingbtn = true;
         this.$axios.post('http://dev.fastdonate.local/api/comment/' + this.idmod, {
           text: this.textComment
-        }, {
-          headers: {Authorization: `${ localStorage.getItem('token') }`}
         }).then((data) => {
           this.textComment = '';
           let newComment = data.data.comments;

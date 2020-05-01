@@ -51,11 +51,6 @@
 					{
 						id: this.$route.params.id,
 						text: this.message,
-					},
-					{
-						headers: {
-							Authorization: `${ localStorage.getItem('token') }`,
-						},
 					}).then((data) => {
 					this.hide = false;
 					this.test = data.data.comments;

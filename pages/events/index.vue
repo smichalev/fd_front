@@ -41,6 +41,16 @@
 	import headerPage from "../../components/headerPage";
 
 	export default {
+		async asyncData({$axios, error, store}) {
+			let result = await $axios.$get('http://dev.fastdonate.local/api/login');
+			if (!result.result) {
+				let lang = await $axios.$get('http://dev.fastdonate.local/api/lang');
+				error({
+					statusCode: 401,
+					message: lang.lang === 'ru' ? 'Вы не авторизованны' : 'Your not authorized',
+				});
+			}
+		},
 		components: {
 			headerPage,
 		},
@@ -85,9 +95,7 @@
 			load() {
 				this.loading = true;
 				this.disabled = true;
-				this.$axios.get('http://dev.fastdonate.local/api/events?page=' + this.page, {
-					headers: {Authorization: `${ localStorage.getItem('token') }`},
-				}).then((data) => {
+				this.$axios.get('http://dev.fastdonate.local/api/events?page=' + this.page).then((data) => {
 					    if (data.data.events.length) {
 						    data.data.events.forEach((item) => {
 							    let content, color, timestamp, size, type, link;
@@ -155,9 +163,7 @@
 					    this.viewCount = this.viewCount + data.data.events.length;
 				    })
 				    .then(() => {
-					    this.$axios.get('http://dev.fastdonate.local/api/events/count', {
-						    headers: {Authorization: `${ localStorage.getItem('token') }`},
-					    }).then((count) => {
+					    this.$axios.get('http://dev.fastdonate.local/api/events/count').then((count) => {
 						    this.$store.commit('notification', +count.data.count);
 					    });
 				    })

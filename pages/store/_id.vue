@@ -211,7 +211,6 @@
 			removeMod() {
 				this.$axios.delete('http://dev.fastdonate.local/api/mod/' + params.id, {
 					headers: {
-						Authorization: `${ localStorage.getItem('token') }`,
 						'Content-Type': 'multipart/form-data',
 					},
 				});

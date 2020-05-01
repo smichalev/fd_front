@@ -68,11 +68,6 @@
 						id: this.$route.params.id,
 						text: this.msg,
 						parent: this.comment.id,
-					},
-					{
-						headers: {
-							Authorization: `${ localStorage.getItem('token') }`,
-						},
 					}).then((data) => {
 					data.data.comments.Creator = {
 						id: this.$store.state.profile.id,
