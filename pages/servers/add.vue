@@ -3,6 +3,9 @@
     <v-container fluid style="width: 100%" class="mb-4">
       <headerPage :breadcrumbs="breadcrumbs" :titlePage="titlePage"></headerPage>
       <v-card class="mt-3" outlined>
+        <div style="background: #0c42ae; color: #fff; font-size: 20px" class="px-4 py-1">
+          {{ $store.state.lang == 'ru' ? 'Добавить новый сервер' : 'Add new server' }}
+        </div>
         <v-alert
           dense
           text

@@ -54,11 +54,11 @@
                     right
                     color="error"
                     overlap
-                    v-if="$store.state.notification > 0"
+                    v-if="notify__count > 0"
                     class="mobile"
                   >
                     <template v-slot:badge>
-                      {{ $store.state.notification }}
+                      {{ notify__count }}
                     </template>
                     <v-avatar size="40" class="justify-center mobile">
                       <img :src="profile.avatar">
@@ -203,26 +203,34 @@
 			isLogin() {
 				return this.$store.state.profile ? true : false;
 			},
+			notify__count() {
+				return this.$store.state.notification;
+			},
+		},
+		watch: {
+			notify__count(newVal) {
+				return newVal;
+			},
 		},
 		mounted() {
 			Promise.all([
-				       this.$axios.get('http://dev.fastdonate.local/api/profile'),
-				       this.$axios.get('http://dev.fastdonate.local/api/events/count'),
-			       ])
-			       .then(([data, count]) => {
-				       this.loading = false;
-				       if (data.data.profile !== {}) {
-					       this.$store.commit('login', data.data.profile);
-					       this.profile = data.data.profile;
-					       this.login = true;
-					       this.$store.commit('notification', +count.data.count);
-				       }
-			       })
-			       .catch(() => {
-				       this.loading = false;
-				       this.login = false;
-				       this.logout();
-			       });
+					this.$axios.get('http://dev.fastdonate.local/api/profile'),
+					this.$axios.get('http://dev.fastdonate.local/api/events/count'),
+				])
+				.then(([data, count]) => {
+					this.loading = false;
+					if (data.data.profile !== {}) {
+						this.$store.commit('login', data.data.profile);
+						this.profile = data.data.profile;
+						this.login = true;
+						this.$store.commit('notification', +count.data.count);
+					}
+				})
+				.catch(() => {
+					this.loading = false;
+					this.login = false;
+					this.logout();
+				});
 		},
 	};
 </script>
