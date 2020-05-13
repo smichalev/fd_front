@@ -8,6 +8,7 @@
         <v-icon>mdi-menu</v-icon>
       </v-btn>
       <logo></logo>
+      <language class="ml-1"></language>
       <v-spacer/>
       <div v-if="loading">
         <v-progress-circular
@@ -17,14 +18,30 @@
         ></v-progress-circular>
       </div>
       <div v-else>
-        <v-btn v-if="!login" color="#171a21" dark elevation="0" @click="authorization">
-          <v-icon>mdi-steam</v-icon>
-          <span class="desktop ml-1">Steam login</span>
-        </v-btn>
+        <div class="desktop">
+          <v-btn v-if="!login" color="#171a21" dark elevation="0" @click="authorization">
+            <v-icon>mdi-steam</v-icon>
+            <span class="ml-1">Steam login</span>
+          </v-btn>
+        </div>
+        <div class="mobile">
+          <v-btn v-if="!login" color="#171a21" dark elevation="0" @click="authorization" fab small>
+            <v-icon>mdi-steam</v-icon>
+          </v-btn>
+        </div>
         <div style="display: flex; align-items: center">
-          <v-toolbar-items v-if="login" style="height: 48px;">
+          <v-toolbar-items v-if="login" style="height: 48px;" class="desktop">
             <v-btn color="#0c42ae" dark elevation="0" @click="$router.push({path: '/events'})">
-              {{ $store.state.notification }}
+              <v-badge
+                :content="$store.state.notification"
+                :value="messages"
+                color="error"
+                overlap
+                v-if="$store.state.notification > 0"
+              >
+                <v-icon>mdi-bell</v-icon>
+              </v-badge>
+              <v-icon v-else>mdi-bell</v-icon>
             </v-btn>
           </v-toolbar-items>
 
@@ -32,10 +49,29 @@
             <v-menu offset-y bottom right transition="slide-y-transition">
               <template v-slot:activator="{ on }">
                 <v-btn v-on="on" color="#0c42ae" dark elevation="0">
-                  <v-avatar size="40" class="justify-center">
+                  <v-badge
+                    top
+                    right
+                    color="error"
+                    overlap
+                    v-if="$store.state.notification > 0"
+                    class="mobile"
+                  >
+                    <template v-slot:badge>
+                      {{ $store.state.notification }}
+                    </template>
+                    <v-avatar size="40" class="justify-center mobile">
+                      <img :src="profile.avatar">
+                    </v-avatar>
+                  </v-badge>
+                  <v-avatar size="40" class="justify-center mobile" v-else>
                     <img :src="profile.avatar">
                   </v-avatar>
-                  <div style="flex-direction: column" class="d-none d-sm-flex ml-1">
+
+                  <v-avatar size="40" class="justify-center desktop">
+                    <img :src="profile.avatar">
+                  </v-avatar>
+                  <div style="flex-direction: column" class="d-none d-sm-flex ml-2">
                     <div>{{ profile.login }}</div>
                     <div style="font-size: 12px">{{ profile.balance.toFixed(2) }} ₽</div>
                   </div>
@@ -53,6 +89,14 @@
                   </v-list-item>
                 </div>
                 <v-divider class="my-0 mobile"></v-divider>
+                <div class="mobile">
+                  <v-list-item to="/events">
+                    <v-list-item-title>
+                      <div>{{ $store.state.lang === 'ru' ? 'Уведомлений' : 'Notification' }}: <span
+                        class="grey--text text--lighten-1">{{ $store.state.notification }} </span></div>
+                    </v-list-item-title>
+                  </v-list-item>
+                </div>
                 <v-list-item to="/donate">
                   <v-list-item-title>
                     {{ $store.state.lang === 'ru' ? 'Пополнить' : 'Replenish' }}
@@ -120,10 +164,11 @@
 <script>
 	import logo from './../components/logo';
 	import sidebar from './../components/sidebar';
+	import language from './../components/language';
 
 	export default {
 		components: {
-			logo, sidebar,
+			logo, sidebar, language,
 		},
 		data() {
 			return {

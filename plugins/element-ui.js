@@ -6,7 +6,7 @@ import {
   Rate,
   Timeline,
   TimelineItem,
-  Tooltip
+  Tooltip,
 } from 'element-ui';
 
 Vue.use(Rate);

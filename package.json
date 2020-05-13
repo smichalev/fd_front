@@ -15,7 +15,8 @@
     "@nuxtjs/moment": "^1.6.0",
     "element-ui": "^2.13.0",
     "nuxt": "^2.0.0",
-    "vue-the-mask": "^0.11.1"
+    "vue-the-mask": "^0.11.1",
+    "vuelidate": "^0.7.5"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.0.0"
